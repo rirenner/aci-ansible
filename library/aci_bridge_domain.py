@@ -1,277 +1,298 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-DOCUMENTATION = '''
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+ANSIBLE_METADATA = {'metadata_version': '1.0',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+
+
+DOCUMENTATION = r'''
 ---
-
 module: aci_bridge_domain
-short_description: Direct access to the APIC API
+short_description: Manage Bridge Domains on Cisco ACI Fabrics
 description:
-    - Offers direct access to the APIC API
-author: Cisco
+- Manages Bridge Domains on Cisco ACI Fabrics.
+author:
+- Swetha Chunduri (@schunduri)
+- Dag Wieers (@dagwieers)
+- Jacob McGill (@jmcgill298)
 requirements:
-    - ACI Fabric 1.0(3f)+
+- ACI Fabric 1.0(3f)+
+version_added: '2.4'
 notes:
-    - Tenant should already exist
+- The tenant used must exist before using this module in your playbook. The M(aci_tenant) module can be used for this.
 options:
-   action:
-        description:
-            - post, get or delete
-        required: true
-        default: null
-        choices: ['post', 'get','delete']
-        aliases: []
-   tenant_name:
-        description:
-            - Tenant Name
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   bd_name:
-        description:
-            - Bridge Domain
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   vrf_name:
-        description:
-            - VRF name to associate to the Bridge Domain
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   arp_flooding:
-        description:
-            - Enable or Disable ARP_Flooding
-        required: true
-        default: null
-        choices: []
-        aliases: []
-    gateway_ip:
-        description:
-            - Gateway IP for subnet
-        required: true
-        default: null
-        choices: []
-        aliases: [] 
-    subnet_mask:
-        description:
-            - Value of the subnet mask 
-        required: true 
-        default: null 
-        choices: []
-        aliases: [] 
-    scope:
-        description:
-            - Subent Scope - can be private or public and shared  
-        required: false 
-        default: 'private'
-        choices: []
-        aliases: []
-    host:
-        description:
-            - IP Address or hostname of APIC resolvable by Ansible control host
-        required: true
-        default: null
-        choices: []
-        aliases: []
-    username:
-        description:
-            - Username used to login to the switch
-        required: true
-        default: 'admin'
-        choices: []
-        aliases: []
-    password:
-        description:
-            - Password used to login to the switch
-        required: true
-        default: null
-        choices: []
-        aliases: []
-    protocol:
-        description:
-            - Dictates connection protocol to use
-        required: false
-        default: https
-        choices: ['http', 'https']
-        aliases: []
+  arp_flooding:
+    description:
+    - Determines if the Bridge Domain should flood ARP traffic.
+    - The APIC defaults new Bridge Domains to "no".
+    type: str
+    choices: [ no, yes ]
+  bd:
+    description:
+    - The name of the Bridge Domain.
+    type: str
+    aliases: [ bd_name, name ]
+  bd_type:
+    description:
+    - The type of traffic on the Bridge Domain.
+    - The APIC defaults new Bridge Domains to Ethernet.
+    type: str
+    choices: [ ethernet, fc ]
+  description:
+    description:
+    - Description for the Bridge Domain.
+    type: str
+  enable_multicast:
+    description:
+    - Determines if PIM is enabled
+    - The APIC defaults new Bridge Domains to disabled.
+    type: str
+    choices: [ no, yes ]
+  enable_routing:
+    description:
+    - Determines if IP forwarding should be allowed.
+    - The APIC defaults new Bridge Domains to IP forwarding enabled.
+    type: str
+    choices: [ no, yes ]
+  endpoint_clear:
+    description:
+    - Clears all End Points in all Leaves when enabled.
+    - The APIC defaults new Bridge Domains to disabled.
+    - The value is not reset to disabled once End Points have been cleared; that requires a second task.
+    type: str
+    choices: [ no, yes ]
+  endpoint_move_detect:
+    description:
+    - Determines if GARP should be enabled to detect when End Points move.
+    - The APIC defaults new Bridge Domains to not use GARP.
+    type: str
+    choices: [ default, garp ]
+  endpoint_retention_action:
+   description:
+   - Determines if the Bridge Domain should inherit or resolve the End Point Retention Policy.
+   - The APIC defaults new Bridge Domain to End Point Retention Policies to resolve the policy.
+   type: str
+  endpoint_retention_policy:
+    description:
+    - The name of the End Point Retention Policy the Bridge Domain should use when
+      overriding the default End Point Retention Policy.
+    type: str
+    choices: [ inherit, resolve ]
+  igmp_snoop_policy:
+    description:
+    - The name of the IGMP Snooping Policy the Bridge Domain should use when
+      overriding the default IGMP Snooping Policy.
+    type: str
+  ip_learning:
+    description:
+    - Determines if the Bridge Domain should learn End Point IPs.
+    - The APIC defaults new Bridge Domains to enable IP learning.
+    type: str
+    choices: [ no, yes ]
+  ipv6_nd_policy:
+    description:
+    - The name of the IPv6 Neighbor Discovery Policy the Bridge Domain should use when
+      overridding teh default IPV6 ND Policy.
+    type: str
+  l2_unknown_unicast:
+    description:
+    - Determines what forwarding method to use for unknown l2 destinations.
+    - The APIC defaults new Bridge domains to use Hardware Proxy.
+    type: str
+    choices: [ proxy, flood ]
+  l3_unknown_multicast:
+    description:
+    - Determines the forwarding method to use for unknown multicast destinations.
+    - The APCI defaults new Bridge Domains to use normal flooding.
+    type: str
+    choices: [ flood, opt-flood ]
+  limit_ip_learn:
+    description:
+    - Determines if the BD should limit IP learning to only subnets owned by the Bridge Domain.
+    - The APIC defaults new Bridge Domains to learn all IP addresses.
+    type: str
+    choices: [ no, yes ]
+  multi_dest:
+    description:
+    - Determines the forwarding method for L2 multicast, broadcast, and link layer traffic.
+    - The APIC defaults new Bridge Domains to use bd-flood.
+    type: str
+    choices: [ bd-flood, drop, encap-flood ]
+  state:
+    description:
+    - Use C(present) or C(absent) for adding or removing.
+    - Use C(query) for listing an object or multiple objects.
+    type: str
+    choices: [ absent, present, query ]
+    type: str
+    default: present
+  tenant:
+    description:
+    - The name of the Tenant.
+    type:str,
+    aliases: [ tenant_name ]
+  vrf:
+    description:
+    - The name of the VRF.
+    type: str
+    aliases: [ vrf_name ]
 '''
 
-EXAMPLES =  '''
-
- aci_bridge_domain:
-     action: "{{ action }}"
-     tenant_name: "{{ tenant_name }}" 
-     bd_name: "{{ bd_name }}" 
-     vrf_name: "{{ vrf_name }}"
-     arp_flooding: "{{ arp_flooding }}"
-     l2_unknown_unicast: "{{ l2_unknown_unicast }}"
-     l3_unknown_multicast: "{{ l3_unknown_multicast }}"
-     multi_dest: "{{ multi_dest }}" 
-     gateway_ip: "{{ gateway_ip }}"
-     subnet_mask: "{{ subnet_mask }}"
-     scope: "{{ scope }}"
-     host: "{{ inventory_hostname }}"
-     username: "{{ username }}"
-     password: "{{ password }}"
-     protocol: "{{ protocol }}"
-
-
+EXAMPLES = r'''
+- name: Add Bridge Domain
+  aci_bridge_domain:
+    action: "{{ action }}"
+    tenant: "{{ tenant }}"
+    bd: "{{ bd }}"
+    vrf: "{{ vrf }}"
+    arp_flooding: "{{ arp_flooding }}"
+    l2_unknown_unicast: "{{ l2_unknown_unicast }}"
+    l3_unknown_multicast: "{{ l3_unknown_multicast }}"
+    multi_dest: "{{ multi_dest }}"
+    gateway_ip: "{{ gateway_ip }}"
+    subnet_mask: "{{ subnet_mask }}"
+    scope: "{{ scope }}"
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    protocol: "{{ protocol }}"
 '''
 
-import socket
-import json
-import requests
+RETURN = r''' # '''
+
+from ansible.module_utils.aci import ACIModule, aci_argument_spec
+from ansible.module_utils.basic import AnsibleModule
 
 
 def main():
-    ''' Ansible module to take all the parameter values from the playbook '''
+    argument_spec = aci_argument_spec
+    argument_spec.update(
+        arp_flooding=dict(choices=['no', 'yes']),
+        bd=dict(type='str', aliases=['bd_name', 'name']),
+        bd_type=dict(type='str', choices=['ethernet', 'fc']),
+        description=dict(type='str'),
+        enable_multicast=dict(type='str', choices=['no', 'yes']),
+        enable_routing=dict(type='str', choices=['no', 'yes']),
+        endpoint_clear=dict(type='str', choices=['no', 'yes']),
+        endpoint_move_detect=dict(type='str', choices=['default', 'garp']),
+        endpoint_retention_action=dict(type='str', choices=['inherit', 'resolve']),
+        endpoint_retention_policy=dict(type='str'),
+        igmp_snoop_policy=dict(type='str'),
+        ip_learning=dict(type='str', choices=['no', 'yes']),
+        ipv6_nd_policy=dict(type='str'),
+        l2_unknown_unicast=dict(choices=['proxy', 'flood']),
+        l3_unknown_multicast=dict(choices=['flood', 'opt-flood']),
+        limit_ip_learn=dict(type='str', choices=['no', 'yes']),
+        multi_dest=dict(choices=['bd-flood', 'drop', 'encap-flood']),
+        state=dict(choices=['absent', 'present', 'query'], type='str', default='present'),
+        tenant=dict(type='str', aliases=['tenant_name']),
+        vrf=dict(type='str', aliases=['vrf_name']),
+        gateway_ip=dict(type='str', removed_in_version='2.4'),  # Deprecated starting from v2.4
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
+        scope=dict(type='str', removed_in_version='2.4'),  # Deprecated starting from v2.4
+        subnet_mask=dict(type='str', removed_in_version='2.4')  # Deprecated starting from v2.4
+    )
 
-    module = AnsibleModule(argument_spec=dict(
-        action=dict(choices=['get', 'post', 'delete']),
-        tenant_name=dict(type='str', required=True),
-        bd_name=dict(type='str', required=True),
-        arp_flooding=dict(choices=['yes','no'], default="yes"),
-        l2_unknown_unicast=dict(choices=['proxy','flood'], default='proxy'),
-        l3_unknown_multicast=dict(choices=['flood','opt-flood'], default='flood'),
-        multi_dest=dict(choices=['bd-flood','drop','encap-flood'], default='bd-flood'),
-        vrf_name=dict(type='str'),
-        gateway_ip=dict(type='str', default=0, required=False),
-        subnet_mask=dict(type='str', default=0, required=False),
-        scope=dict(type='str',default='private'),
-        host=dict(required=True),
-        username=dict(type='str', default='admin'),
-        password=dict(type='str'),
-        protocol=dict(choices=['http', 'https'], default='http'),
-        ), supports_check_mode=False)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[['state', 'absent', ['bd', 'tenant']],
+                     ['state', 'present', ['bd', 'tenant']]]
+    )
 
-    tenant_name = module.params['tenant_name']
-    host = socket.gethostbyname(module.params['host'])
-    bd_name = module.params['bd_name']
-    arp_flooding = module.params['arp_flooding']
     l2_unknown_unicast = module.params['l2_unknown_unicast']
     l3_unknown_multicast = module.params['l3_unknown_multicast']
+    arp_flooding = module.params['arp_flooding']
+    bd = module.params['bd']
+    bd_type = module.params['bd_type']
+    if bd_type == 'ethernet':
+        # ethernet type is represented as regular, but that is not clear to the users
+        bd_type = 'regular'
+    description = module.params['description']
+    enable_multicast = module.params['enable_multicast']
+    enable_routing = module.params['enable_routing']
+    endpoint_clear = module.params['endpoint_clear']
+    endpoint_move_detect = module.params['endpoint_move_detect']
+    if endpoint_move_detect == 'default':
+        # the ACI default setting is an empty string, but that is not a good input value
+        endpoint_move_detect = ''
+    endpoint_retention_action = module.params['endpoint_retention_action']
+    endpoint_retention_policy = module.params['endpoint_retention_policy']
+    igmp_snoop_policy = module.params['igmp_snoop_policy']
+    ip_learning = module.params['ip_learning']
+    ipv6_nd_policy = module.params['ipv6_nd_policy']
+    limit_ip_learn = module.params['limit_ip_learn']
     multi_dest = module.params['multi_dest']
-    vrf_name = module.params['vrf_name']
-    username = module.params['username']
-    password = module.params['password']
-    protocol = module.params['protocol']
-    action = module.params['action']
+    state = module.params['state']
+    tenant = module.params['tenant']
+    vrf = module.params['vrf']
 
-    #subnet
-    gateway_ip = module.params['gateway_ip']
-    subnet_mask = module.params['subnet_mask']
-    if gateway_ip != 0  and subnet_mask != 0:
-       ip = gateway_ip + "/" + subnet_mask
-    else:
-       ip = ''
-    scope = module.params['scope']
-   
-    post_uri = 'api/mo/uni/tn-' + tenant_name + '/BD-' + bd_name + '.json'
-    get_uri = 'api/node/class/fvBD.json'
+    # Give warning when fvSubnet parameters are passed as those have been moved to the aci_subnet module
+    if module.params['gateway_ip'] or module.params['subnet_mask'] or module.params['scope']:
+        module._warnings = ["The support for managing Subnets has been moved to its own module, aci_subnet. \
+                            The new modules still supports 'gateway_ip' and 'subnet_mask' along with more features"]
 
-    config_data =  {
-         "fvBD": {
-             "attributes": {
-                  "descr": "test",
-                  "arpFlood": arp_flooding,
-                  "unkMacUcastAct":l2_unknown_unicast,
-                  "unkMcastAct": l3_unknown_multicast,
-                  "multiDstPktAct": multi_dest
-               },
-              "children":[{
-                   "fvRsCtx": {
-                      "attributes": {
-                          "tnFvCtxName": vrf_name
-                         }
-                      }
-                  }
-                ]
-
-           }
-     }
-
-    subnet_config_data =  {
-                   "fvSubnet":{
-                      "attributes":{
-                          "ip": ip,
-                          "scope": scope
-                        }
-                    }
-                  }
-
-
-    payload_data = json.dumps(config_data)
-    subnet_payload_data = json.dumps(subnet_config_data)
-
-    apic = '{0}://{1}/'.format(protocol, host)
-
-    auth = dict(aaaUser=dict(attributes=dict(name=username,
-                pwd=password)))
-    url = apic + 'api/aaaLogin.json'
-
-    authenticate = requests.post(url, data=json.dumps(auth), timeout=2,
-                                 verify=False)
-
-    if authenticate.status_code != 200:
-        module.fail_json(msg='could not authenticate to apic',
-                         status=authenticate.status_code,
-                         response=authenticate.text)
-
-    if post_uri.startswith('/'):
-        post_uri = post_uri[1:]
-    post_url = apic + post_uri
-
-    if get_uri.startswith('/'):
-        get_uri = get_uri[1:]
-    get_url = apic + get_uri
-
-    if action == 'post':
-        req = requests.post(post_url, cookies=authenticate.cookies,
-                            data=payload_data, verify=False)
-        if gateway_ip != 0:
-           get_bd = requests.get(post_url, cookies=authenticate.cookies,
-                                 data=payload_data, verify=False)
-           data =json.loads(get_bd.text)
-           count = data['totalCount']
-           count = int(count)
-           bridge_domain_list = []
-           if get_bd.status_code == 200:
-              for name in range(0,count):
-                  bd = data['imdata'][name]['fvBD']['attributes']['name']
-                  bridge_domain_list.append(bd)
-                  if bd_name in bridge_domain_list:
-                      subnet_req = requests.post(post_url, cookies=authenticate.cookies,
-                                                 data=subnet_payload_data, verify=False)
-                  else:
-                       module.fail_json(msg='Subnet creation failed.')
-    elif action == 'get':
-        req = requests.get(get_url, cookies=authenticate.cookies,
-                           data=payload_data, verify=False)
-    elif action == 'delete':
-        req = requests.delete(post_url, cookies=authenticate.cookies, data=payload_data, verify=False)
-
-    response = req.text
-    status = req.status_code
-   
-    changed = False
-    if req.status_code == 200:
-        if action == 'post':
-            changed = True
+    if bd is not None:
+        if tenant is not None:
+            path = 'api/mo/uni/tn-%(tenant)s/BD-%(bd)s.json' % module.params
+            filter_string = '?rsp-subtree=full&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet&rsp-prop-include=config-only'
         else:
-            changed = False
+            path = 'api/class/fvBD.json'
+            filter_string = ('?query-target-filter=eq(fvBD.name, \"%(bd)s\")&rsp-subtree=children'
+                             '&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet') % module.params
+    elif tenant is not None:
+        path = 'api/mo/uni/tn-%(tenant)s.json' % module.params
+        filter_string = '?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet'
     else:
-        module.fail_json(msg=response,
-                         response=response, status=status)
+        path = 'api/class/fvBD.json'
+        filter_string = "?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet"
 
-    results = {}
-    results['status'] = status
-    results['response'] = response
-    results['changed'] = changed
-    module.exit_json(**results)
+    aci = ACIModule(module)
 
-from ansible.module_utils.basic import *
-if __name__ == '__main__':
-   main()
+    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
+
+    aci.get_existing(filter_string=filter_string)
+
+    if state == 'present':
+        # Filter out module params with null values
+        aci.payload(aci_class='fvBD',
+                    class_config=dict(arpFlood=arp_flooding,
+                                      descr=description,
+                                      epClear=endpoint_clear,
+                                      epMoveDetectMode=endpoint_move_detect,
+                                      ipLearning=ip_learning,
+                                      limitIpLearnToSubnets=limit_ip_learn,
+                                      mcastAllow=enable_multicast,
+                                      multiDstPktAct=multi_dest,
+                                      name=bd,
+                                      type=bd_type,
+                                      unicastRoute=enable_routing,
+                                      unkMacUcastAct=l2_unknown_unicast,
+                                      unkMcastAct=l3_unknown_multicast),
+                    child_configs=[{'fvRsCtx': {'attributes': {'tnFvCtxName': vrf}}},
+                                   {'fvRsIgmpsn': {'attributes': {'tnIgmpSnoopPolName': igmp_snoop_policy}}},
+                                   {'fvRsBDToNdP': {'attributes': {'tnNdIfPolName': ipv6_nd_policy}}},
+                                   {'fvRsBdToEpRet': {'attributes': {'resolveAct': endpoint_retention_action,
+                                    'tnFvEpRetPolName': endpoint_retention_policy}}}]
+                    )
+
+        # generate config diff which will be used as POST request body
+        aci.get_diff(aci_class='fvBD')
+
+        # submit changes if module not in check_mode and the proposed is different than existing
+        aci.post_config()
+
+    elif state == 'absent':
+        aci.delete_config()
+
+    module.exit_json(**aci.result)
+
+
+if __name__ == "__main__":
+    main()

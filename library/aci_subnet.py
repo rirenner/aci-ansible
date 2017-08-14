@@ -11,7 +11,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.0',
                     'supported_by': 'community'}
 
 DOCUMENTATION = r'''
-module: aci_contract
+module: aci_subnet
 short_description: Manage subnets on Cisco ACI fabrics
 description:
 - Manage subnets on Cisco ACI fabrics.
@@ -54,10 +54,6 @@ options:
     type: int
     choices: [ Any 0 to 32 for IPv4 Addresses, 0-128 for IPv6 Addresses  ]
     aliases: [ subnet_mask ]
-  name:
-    description:
-    - The name of the Subnet.
-    type: str
   nd_prefix_policy:
     description:
     - The IPv6 Neighbor Discovery Prefix Policy to associate with the Subnet.
@@ -96,6 +92,11 @@ options:
     - The APIC defaults new Subnets to ND RA.
     type: str
     choices: [ nd_ra, no_gw, querier_ip, unspecified ]
+  subnet_name:
+    description:
+    - The name of the Subnet.
+    type: str
+    aliases: [ name ]
   tenant:
     description:
     - The name of the Tenant.
@@ -122,7 +123,7 @@ def main():
         enable_vip=dict(type='str', choices=['no', 'yes']),
         gateway=dict(type='str', aliases=['gateway_ip']),
         mask=dict(type='int', aliases=['subnet_mask']),
-        name=dict(type='str'),
+        subnet_name=dict(type='str', aliases=['name']),
         nd_prefix_policy=dict(type='str'),
         preferred=dict(type='str', choices=['no', 'yes']),
         route_profile=dict(type='str'),
@@ -152,7 +153,7 @@ def main():
         module.fail_json(msg='Valid Subnet Masks are 0 to 32 for IPv4 Addresses and 0 to 128 for IPv6 addresses')
     if gateway is not None and mask is not None:
         gateway_addr = '{}/{}'.format(gateway, str(mask))
-    name = module.params['name']
+    subnet_name = module.params['subnet_name']
     nd_prefix_policy = module.params['nd_prefix_policy']
     preferred = module.params['preferred']
     route_profile = module.params['route_profile']
@@ -181,7 +182,7 @@ def main():
         else:
             path = 'api/class/fvSubnet.json'
             filter_string = '?query-target-filter=eq(fvSubnet.ip, \"%(gateway)s/%(mask)s\")&rsp-subtree=children' % module.params
-    elif name is not None:
+    elif subnet_name is not None:
         if tenant is not None and bd is not None:
             path = 'api/mo/uni/tn-%(tenant)s/BD-%(bd)s.json' % module.params
             filter_string = ('?rsp-subtree=full&rsp-subtree-class=fvSubnet,fvRsBDSubnetToProfile,fvRsNdPfxPol'
@@ -219,7 +220,7 @@ def main():
     if state == 'present':
         # Filter out module params with null values
         aci.payload(aci_class='fvSubnet',
-                    class_config=dict(ctrl=subnet_control, descr=description, ip=gateway_addr, name=name,
+                    class_config=dict(ctrl=subnet_control, descr=description, ip=gateway_addr, name=subnet_name,
                                       preferred=preferred, scope=scope, virtual=enable_vip),
                     child_configs=[{'fvRsBDSubnetToProfile': {'attributes': {'tnL3extOutName': route_profile_l3_out,
                                     'tnRtctrlProfileName': route_profile}}},

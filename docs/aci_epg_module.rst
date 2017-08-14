@@ -1,8 +1,8 @@
 .. _aci_epg:
 
 
-aci_epg - Manage top level application network profile objects
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_epg - Manage end point groups and related contracts on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_epg - Manage top level application network profile objects
 Synopsis
 --------
 
-* Manage top level application network profile object, i.e. this does not manage EPGs.
+* Manage end point groups and related contracts on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -133,26 +133,24 @@ Examples
  ::
 
     
-    
-        aci_epg:
-           action: "{{ action }}"
-           epg_name: ""{{ epg_name }}"
-           app_profile_name: "{{ app_profile_name }}"
-           tenant_name: "{{ tenant_name }}"
-           bd_name: "{{ bd_name }}"
-           priority: "{{ priority }}"
-           contract_type: "{{ contract_type }}"
-           contract_name_provider: "{{ contract_name_provider }}"
-           contract_name_consumer: "{{ contract_name_consumer }}"
-           priority_provider: "{{ priority_provider }}"
-           priority_consumer: "{{ priority_consumer }}"
-           intra_epg_isolation: "{{ intra_epg_isolation }}"
-           descr: "{{ descr }}"
-           host: "{{ inventory_hostname }}"
-           username: "{{ user }}"
-           password: "{{ pass }}"
-           protocol: "{{ protocol }}"
-    
+    - aci_epg:
+        action: "{{ action }}"
+        epg_name: ""{{ epg_name }}"
+        app_profile_name: "{{ app_profile_name }}"
+        tenant_name: "{{ tenant_name }}"
+        bd_name: "{{ bd_name }}"
+        priority: "{{ priority }}"
+        contract_type: "{{ contract_type }}"
+        contract_name_provider: "{{ contract_name_provider }}"
+        contract_name_consumer: "{{ contract_name_consumer }}"
+        priority_provider: "{{ priority_provider }}"
+        priority_consumer: "{{ priority_consumer }}"
+        intra_epg_isolation: "{{ intra_epg_isolation }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

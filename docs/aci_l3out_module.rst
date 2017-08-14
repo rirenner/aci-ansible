@@ -1,8 +1,8 @@
 .. _aci_l3out:
 
 
-aci_l3out - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++++
+aci_l3out - Manage Layer 3 out association to bridge domains on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_l3out - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage Layer 3 out association to bridge domains on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -90,8 +90,8 @@ Examples
     
     - aci_l3out:
          action: "{{ action }}"
-         tenant_name: "{{ tenant_name }}" 
-         bd_name: "{{ bd_name }}" 
+         tenant_name: "{{ tenant_name }}"
+         bd_name: "{{ bd_name }}"
          l3_out: "{{ l3_out }}"
          host: "{{ inventory_hostname }}"
          username: "{{ username }}"

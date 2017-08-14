@@ -1,8 +1,8 @@
 .. _aci_contract_subjects:
 
 
-aci_contract_subjects - Manages initial contract subjects(does not include contracts)
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_contract_subjects - Manage initial contract subjects on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_contract_subjects - Manages initial contract subjects(does not include contr
 Synopsis
 --------
 
-* Manage contract subjects with this module
+* Manage initial contract subjects on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -119,20 +119,20 @@ Examples
 
     
     - aci_contract_subjects:
-           action: "{{ action }}"
-           subject_name: "{{ subject_name }}"
-           contract_name: "{{ contract_name }}"
-           tenant_name: "{{ tenant_name }}"
-           priority: "{{ priority }}"
-           reverse_filter: "{{ reverse_filter }}"
-           filter_name: "{{ filter_name }}"
-           directive: "{{ directive }}"   
-           target: "{{ target }}"
-           descr: "{{ descr }}"
-           host: "{{ inventory_hostname }}"
-           username: "{{ user }}"
-           password: "{{ pass }}"
-           protocol: "{{ protocol }}"
+        action: "{{ action }}"
+        subject_name: "{{ subject_name }}"
+        contract_name: "{{ contract_name }}"
+        tenant_name: "{{ tenant_name }}"
+        priority: "{{ priority }}"
+        reverse_filter: "{{ reverse_filter }}"
+        filter_name: "{{ filter_name }}"
+        directive: "{{ directive }}"
+        target: "{{ target }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

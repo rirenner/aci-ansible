@@ -1,8 +1,8 @@
 .. _aci_anp:
 
 
-aci_anp - Manage top level application network profile objects
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_anp - Manage top level application network profile objects on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -88,17 +88,15 @@ Examples
  ::
 
     
-    
-        aci_anp:
-           action: "{{ action }}"
-           app_profile_name: "{{ app_profile_name }}"
-           tenant_name: "{{ tenant_name }}"
-           descr: "{{ descr }}"
-           host: "{{ inventory_hostname }}"
-           username: "{{ user }}"
-           password: "{{ pass }}"
-           protocol: "{{ protocol }}"
-    
+    - aci_anp:
+        action: "{{ action }}"
+        app_profile_name: "{{ app_profile_name }}"
+        tenant_name: "{{ tenant_name }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

@@ -1,8 +1,8 @@
 .. _aci_aep:
 
 
-aci_aep - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++
+aci_aep - Manage attachable entity profile on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_aep - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage attachable entity profile on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -83,16 +83,14 @@ Examples
  ::
 
     
-    
-         aci_aep:
-             action: "{{ action }}"  
-             aep_name: "{{ aep_name }}" 
-             descr: "{{ descr }}" 
-             host: "{{ inventory_hostname }}"
-             username: "{{ username }}"
-             password: "{{ password }}"
-             protocol: "{{ protocol }}"
-    
+    - aci_aep:
+        action: "{{ action }}"
+        aep_name: "{{ aep_name }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 

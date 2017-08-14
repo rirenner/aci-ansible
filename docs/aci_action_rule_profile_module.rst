@@ -1,8 +1,8 @@
 .. _aci_action_rule_profile:
 
 
-aci_action_rule_profile - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_action_rule_profile - Manage action rule profiles on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_action_rule_profile - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage action rule profiles on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -88,17 +88,15 @@ Examples
  ::
 
     
-    
-         aci_action_rule_profile:
-             action: "{{ action }}"
-             tenant_name: "{{ tenant_name }}" 
-             action_rule_name: "{{ action_rule_name }}"
-             descr: "{{ descr }}"  
-             host: "{{ inventory_hostname }}"
-             username: "{{ username }}" 
-             password: "{{ password }}"
-    	 protocol: "{{ protocol }}"
-    
+    - aci_action_rule_profile:
+          action: "{{ action }}"
+          tenant_name: "{{ tenant_name }}"
+          action_rule_name: "{{ action_rule_name }}"
+          descr: "{{ descr }}"
+          host: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          protocol: "{{ protocol }}"
 
 
 Notes

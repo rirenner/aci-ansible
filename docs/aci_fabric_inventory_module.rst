@@ -1,8 +1,8 @@
 .. _aci_fabric_inventory:
 
 
-aci_fabric_inventory - Direct access to the APIC API
-++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_fabric_inventory - Get fabric topology data on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_fabric_inventory - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Get fabric topology data on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -93,17 +93,15 @@ Examples
  ::
 
     
-    
-        aci_fabric_inventory:
-             node_id : "{{ node_id }}"
-             level: "{{ level }}"
-             command: "{{ command }}"
-             filename: "{{ filename }}"
-             host: "{{ host }}"
-             username: "{{ user }}"
-             password: "{{ pass }}"
-             protocol: "{{ protocol }}"
-    
+    - aci_fabric_inventory:
+        node_id : "{{ node_id }}"
+        level: "{{ level }}"
+        command: "{{ command }}"
+        filename: "{{ filename }}"
+        host: "{{ host }}"
+        username: "{{ user }}"
+        password: "{{ pass }}"
+        protocol: "{{ protocol }}"
 
 
 

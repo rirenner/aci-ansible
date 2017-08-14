@@ -1,8 +1,8 @@
 .. _aci_bridge_domain:
 
 
-aci_bridge_domain - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++++++++++++
+aci_bridge_domain - Manage Bridge Domains on Cisco ACI Fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_bridge_domain - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manages Bridge Domains on Cisco ACI Fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,66 +37,109 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>action<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td><ul><li>post</li><li>get</li><li>delete</li></ul></td>
-        <td><div>post, get or delete</div>        </td></tr>
                 <tr><td>arp_flooding<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>Enable or Disable ARP_Flooding</div>        </td></tr>
-                <tr><td>bd_name<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>Bridge Domain</div>        </td></tr>
-                <tr><td>gateway_ip<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>Gateway IP for subnet</div>        </td></tr>
-                <tr><td>host<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>IP Address or hostname of APIC resolvable by Ansible control host</div>        </td></tr>
-                <tr><td>password<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>Password used to login to the switch</div>        </td></tr>
-                <tr><td>protocol<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>https</td>
-        <td><ul><li>http</li><li>https</li></ul></td>
-        <td><div>Dictates connection protocol to use</div>        </td></tr>
-                <tr><td>scope<br/><div style="font-size: small;"></div></td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Determines if the Bridge Domain should flood ARP traffic.</div><div>The APIC defaults new Bridge Domains to "no".</div>        </td></tr>
+                <tr><td>bd<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>private</td>
-        <td></td>
-        <td><div>Subent Scope - can be private or public and shared</div>        </td></tr>
-                <tr><td>subnet_mask<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Value of the subnet mask</div>        </td></tr>
-                <tr><td>tenant_name<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+        <td><div>The name of the Bridge Domain.</div></br>
+    <div style="font-size: small;">aliases: bd_name, name<div>        </td></tr>
+                <tr><td>bd_type<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>ethernet</li><li>fc</li></ul></td>
+        <td><div>The type of traffic on the Bridge Domain.</div><div>The APIC defaults new Bridge Domains to Ethernet.</div>        </td></tr>
+                <tr><td>description<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Tenant Name</div>        </td></tr>
-                <tr><td>username<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td>admin</td>
-        <td></td>
-        <td><div>Username used to login to the switch</div>        </td></tr>
-                <tr><td>vrf_name<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+        <td><div>Description for the Bridge Domain.</div>        </td></tr>
+                <tr><td>enable_multicast<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Determines if PIM is enabled</div><div>The APIC defaults new Bridge Domains to disabled.</div>        </td></tr>
+                <tr><td>enable_routing<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Determines if IP forwarding should be allowed.</div><div>The APIC defaults new Bridge Domains to IP forwarding enabled.</div>        </td></tr>
+                <tr><td>endpoint_clear<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Clears all End Points in all Leaves when enabled.</div><div>The APIC defaults new Bridge Domains to disabled.</div><div>The value is not reset to disabled once End Points have been cleared; that requires a second task.</div>        </td></tr>
+                <tr><td>endpoint_move_detect<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>default</li><li>garp</li></ul></td>
+        <td><div>Determines if GARP should be enabled to detect when End Points move.</div><div>The APIC defaults new Bridge Domains to not use GARP.</div>        </td></tr>
+                <tr><td>endpoint_retention_action<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
     <td></td>
         <td></td>
-        <td><div>VRF name to associate to the Bridge Domain</div>        </td></tr>
+        <td><div>Determines if the Bridge Domain should inherit or resolve the End Point Retention Policy.</div><div>The APIC defaults new Bridge Domain to End Point Retention Policies to resolve the policy.</div>        </td></tr>
+                <tr><td>endpoint_retention_policy<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>inherit</li><li>resolve</li></ul></td>
+        <td><div>The name of the End Point Retention Policy the Bridge Domain should use when overriding the default End Point Retention Policy.</div>        </td></tr>
+                <tr><td>igmp_snoop_policy<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the IGMP Snooping Policy the Bridge Domain should use when overriding the default IGMP Snooping Policy.</div>        </td></tr>
+                <tr><td>ip_learning<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Determines if the Bridge Domain should learn End Point IPs.</div><div>The APIC defaults new Bridge Domains to enable IP learning.</div>        </td></tr>
+                <tr><td>ipv6_nd_policy<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the IPv6 Neighbor Discovery Policy the Bridge Domain should use when overridding teh default IPV6 ND Policy.</div>        </td></tr>
+                <tr><td>l2_unknown_unicast<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>proxy</li><li>flood</li></ul></td>
+        <td><div>Determines what forwarding method to use for unknown l2 destinations.</div><div>The APIC defaults new Bridge domains to use Hardware Proxy.</div>        </td></tr>
+                <tr><td>l3_unknown_multicast<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>flood</li><li>opt-flood</li></ul></td>
+        <td><div>Determines the forwarding method to use for unknown multicast destinations.</div><div>The APCI defaults new Bridge Domains to use normal flooding.</div>        </td></tr>
+                <tr><td>limit_ip_learn<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>False</li><li>True</li></ul></td>
+        <td><div>Determines if the BD should limit IP learning to only subnets owned by the Bridge Domain.</div><div>The APIC defaults new Bridge Domains to learn all IP addresses.</div>        </td></tr>
+                <tr><td>multi_dest<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>bd-flood</li><li>drop</li><li>encap-flood</li></ul></td>
+        <td><div>Determines the forwarding method for L2 multicast, broadcast, and link layer traffic.</div><div>The APIC defaults new Bridge Domains to use bd-flood.</div>        </td></tr>
+                <tr><td>state<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>present</td>
+        <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
+        <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
+                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the Tenant.</div></br>
+    <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
+                <tr><td>vrf<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the VRF.</div></br>
+    <div style="font-size: small;">aliases: vrf_name<div>        </td></tr>
         </table>
     </br>
 
@@ -108,31 +151,30 @@ Examples
  ::
 
     
-    - aci_bridge_domain:
-         action: "{{ action }}"
-         tenant_name: "{{ tenant_name }}" 
-         bd_name: "{{ bd_name }}" 
-         vrf_name: "{{ vrf_name }}"
-         arp_flooding: "{{ arp_flooding }}"
-         l2_unknown_unicast: "{{ l2_unknown_unicast }}"
-         l3_unknown_multicast: "{{ l3_unknown_multicast }}"
-         multi_dest: "{{ multi_dest }}" 
-         gateway_ip: "{{ gateway_ip }}"
-         subnet_mask: "{{ subnet_mask }}"
-         scope: "{{ scope }}"
-         host: "{{ inventory_hostname }}"
-         username: "{{ username }}"
-         password: "{{ password }}"
-         protocol: "{{ protocol }}"
-    
-    
+    - name: Add Bridge Domain
+      aci_bridge_domain:
+        action: "{{ action }}"
+        tenant: "{{ tenant }}"
+        bd: "{{ bd }}"
+        vrf: "{{ vrf }}"
+        arp_flooding: "{{ arp_flooding }}"
+        l2_unknown_unicast: "{{ l2_unknown_unicast }}"
+        l3_unknown_multicast: "{{ l3_unknown_multicast }}"
+        multi_dest: "{{ multi_dest }}"
+        gateway_ip: "{{ gateway_ip }}"
+        subnet_mask: "{{ subnet_mask }}"
+        scope: "{{ scope }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 Notes
 -----
 
 .. note::
-    - Tenant should already exist
+    - The tenant used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` module can be used for this.
 
 
 

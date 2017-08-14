@@ -1,8 +1,8 @@
 .. _aci_epr:
 
 
-aci_epr - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++
+aci_epr - Manage end point retention policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_epr - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage end point retention policies on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -113,22 +113,20 @@ Examples
  ::
 
     
-    
-        aci_epr:
-            action: "{{ action }}"
-            tenant_name: "{{ tenant_name }}"
-            epr_name: "{{ epr_name }}"
-            bounce_age: "{{ bounce_age }}"
-            hold_interval: "{{ hold_interval }}"
-            local_ep_interval: "{{ local_ep_interval }}"
-            remote_ep_interval: "{{ remote_ep_interval }}"
-            move_frequency: "{{ move_frequency }}"
-            descr: "{{ descr }}"
-            host: "{{ inventory_hostname }}"
-            username: "{{ username }}" 
-            password: "{{ password }}"
-    	protocol: "{{ protocol }}"
-    
+    - aci_epr:
+        action: "{{ action }}"
+        tenant_name: "{{ tenant_name }}"
+        epr_name: "{{ epr_name }}"
+        bounce_age: "{{ bounce_age }}"
+        hold_interval: "{{ hold_interval }}"
+        local_ep_interval: "{{ local_ep_interval }}"
+        remote_ep_interval: "{{ remote_ep_interval }}"
+        move_frequency: "{{ move_frequency }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

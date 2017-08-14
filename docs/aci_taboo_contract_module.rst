@@ -1,8 +1,8 @@
-.. _aci_mcp_interface:
+.. _aci_taboo_contract:
 
 
-aci_mcp_interface - Manage MCP interface policies on Cisco ACI fabrics
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_taboo_contract - Manage taboo contracts on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_mcp_interface - Manage MCP interface policies on Cisco ACI fabrics
 Synopsis
 --------
 
-* Manage MCP interface policies on Cisco ACI fabrics.
+* Manage taboo contracts on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,16 +37,11 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>admin_state<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>enable</td>
-        <td><ul><li>disable</li><li>enable</li></ul></td>
-        <td><div>Enable or disable admin state.</div>        </td></tr>
                 <tr><td>description<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Description for the MCP interface.</div></br>
+        <td><div>Description for the filter.</div></br>
     <div style="font-size: small;">aliases: descr<div>        </td></tr>
                 <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
@@ -54,22 +49,28 @@ Options
         <td></td>
         <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
     <div style="font-size: small;">aliases: host<div>        </td></tr>
-                <tr><td>mcp_interface<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td></td>
-        <td><div>The name of the MCP interface.</div></br>
-    <div style="font-size: small;">aliases: name<div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
         <td><div>The password to use for authentication.</div>        </td></tr>
-                <tr><td>state<br/><div style="font-size: small;"></div></td>
+                <tr><td>scope<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>present</td>
-        <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
-        <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
+    <td></td>
+        <td><ul><li>application-profile</li><li>context</li><li>global</li><li>tenant</li></ul></td>
+        <td><div>The scope of a service contract.</div><div>The APIC defaults new Taboo Contracts to a scope of context (VRF).</div>        </td></tr>
+                <tr><td>taboo_contract<br/><div style="font-size: small;"></div></td>
+    <td>yes</td>
+    <td></td>
+        <td></td>
+        <td><div>Taboo Contract name.</div></br>
+    <div style="font-size: small;">aliases: name<div>        </td></tr>
+                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
+    <td>yes</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the tenant.</div></br>
+    <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
                 <tr><td>timeout<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>30</td>
@@ -107,19 +108,20 @@ Examples
  ::
 
     
-    - aci_mcp_interface:
-        hostname: '{{ hostname }}'
+    - aci_taboo_contract:
+        hostname: '{{ inventory_hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'
-        mcp_interface: '{{ mcp_interface }}'
+        taboo_contract: '{{ taboo_contract }}'
         description: '{{ descr }}'
-        admin_state: '{{ admin_state }}'
+        tenant: '{{ tenant }}'
 
 
 Notes
 -----
 
 .. note::
+    - The tenant used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` module can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 

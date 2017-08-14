@@ -1,8 +1,8 @@
 .. _aci_dhcp_assocation:
 
 
-aci_dhcp_assocation - Direct access to the APIC API
-+++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_dhcp_assocation - Manage DHCP Relay Labels in bridge domains on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_dhcp_assocation - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage DHCP Relay Labels in bridge domains on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -93,18 +93,16 @@ Examples
  ::
 
     
-    
-     aci_dhcp_association:
-         action: "{{ action }}"
-         tenant_name: "{{ tenant_name }}" 
-         bd_name: "{{ bd_name }}" 
-         dhcp_name: "{{ dhcp_name }}"
-         dhcp_scope: "{{ dhcp_scope }}"
-         host: "{{ inventory_hostname }}"
-         username: "{{ username }}"
-         password: "{{ password }}"
-         protocol: "{{ protocol }}"
-    
+    - aci_dhcp_association:
+        action: "{{ action }}"
+        tenant_name: "{{ tenant_name }}"
+        bd_name: "{{ bd_name }}"
+        dhcp_name: "{{ dhcp_name }}"
+        dhcp_scope: "{{ dhcp_scope }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

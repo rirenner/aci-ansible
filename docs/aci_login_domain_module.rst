@@ -1,8 +1,8 @@
 .. _aci_login_domain:
 
 
-aci_login_domain - Direct access to the APIC API
-++++++++++++++++++++++++++++++++++++++++++++++++
+aci_login_domain - Manage login domains on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_login_domain - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage login domains on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -83,16 +83,14 @@ Examples
  ::
 
     
-    
-        aci_login_domain:
-            action: "{{ action }}"
-            login_domain: "{{ login_domain }}"
-            descr: "{{ descr }}"
-            host: "{{ inventory_hostname }}"
-            username: "{{ username }}"
-            password: "{{ password }}"
-    	protocol: "{{ protocol }}"
-    
+    - aci_login_domain:
+        action: "{{ action }}"
+        login_domain: "{{ login_domain }}"
+        descr: "{{ descr }}"
+        host: "{{ inventory_hostname }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 

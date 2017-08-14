@@ -1,8 +1,8 @@
 .. _aci_lldp_interface_policy:
 
 
-aci_lldp_interface_policy - Manage ACI LLDP interface policies
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_lldp_interface_policy - Manage LLDP interface policies on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_lldp_interface_policy - Manage ACI LLDP interface policies
 Synopsis
 --------
 
-* Manage ACI LLDAP interface policies
+* Manage LLDP interface policies on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)

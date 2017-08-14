@@ -1,8 +1,8 @@
 .. _aci_port_channel_interface:
 
 
-aci_port_channel_interface - Direct access to the APIC API
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_port_channel_interface - Manage port channel interface policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_port_channel_interface - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage port channel interface policies on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,56 +37,75 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>action<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td><ul><li>post</li><li>get</li><li>delete</li></ul></td>
-        <td><div>post, get, or delete</div>        </td></tr>
-                <tr><td>descr<br/><div style="font-size: small;"></div></td>
+                <tr><td>description<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Description for Port Channel Interfaces</div>        </td></tr>
-                <tr><td>host<br/><div style="font-size: small;"></div></td>
+        <td><div>Description for the port channel.</div></br>
+    <div style="font-size: small;">aliases: descr<div>        </td></tr>
+                <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>IP Address or hostname of APIC resolvable by Ansible control host</div>        </td></tr>
-                <tr><td>max_link<br/><div style="font-size: small;"></div></td>
+        <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
+    <div style="font-size: small;">aliases: host<div>        </td></tr>
+                <tr><td>max_links<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>16</td>
+    <td></td>
         <td></td>
-        <td><div>Maximum Links (range 1-16)</div>        </td></tr>
-                <tr><td>min_link<br/><div style="font-size: small;"></div></td>
+        <td><div>Maximum links (range 1-16).</div><div>The APIC defaults new Port Channel Policies to a max links of 16.</div>        </td></tr>
+                <tr><td>min_links<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>1</td>
+    <td></td>
         <td></td>
-        <td><div>Minimum Links (range 1-16)</div>        </td></tr>
+        <td><div>Minimum links (range 1-16).</div><div>The APIC defaults new Port Channel Policies to a min links of 1.</div>        </td></tr>
                 <tr><td>mode<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>off</td>
-        <td><ul><li>off</li><li>mac-pin</li><li>active</li><li>passive</li><li>mac-pin-nicload</li></ul></td>
-        <td><div>Port channel interface policy mode</div>        </td></tr>
+    <td></td>
+        <td><ul><li>active</li><li>mac-pin</li><li>mac-pin-nicload</li><li>False</li><li>passive</li></ul></td>
+        <td><div>Port channel interface policy mode.</div><div>Determines the LACP method to use for forming port-channels.</div><div>The APIC defaults new Port Channel Polices to a off mode.</div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Password used to login to the switch</div>        </td></tr>
+        <td><div>The password to use for authentication.</div>        </td></tr>
                 <tr><td>port_channel<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Port Channel name</div>        </td></tr>
-                <tr><td>protocol<br/><div style="font-size: small;"></div></td>
+        <td><div>Name of the port channel.</div></br>
+    <div style="font-size: small;">aliases: name<div>        </td></tr>
+                <tr><td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>https</td>
-        <td><ul><li>http</li><li>https</li></ul></td>
-        <td><div>Dictates connection protocol to use</div>        </td></tr>
+    <td>present</td>
+        <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
+        <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
+                <tr><td>timeout<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>30</td>
+        <td></td>
+        <td><div>The socket level timeout in seconds.</div>        </td></tr>
+                <tr><td>use_proxy<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, it will not use a proxy, even if one is defined in an environment variable on the target hosts.</div>        </td></tr>
+                <tr><td>use_ssl<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, an HTTP connection will be used instead of the default HTTPS connection.</div>        </td></tr>
                 <tr><td>username<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td>admin</td>
         <td></td>
-        <td><div>Username used to login to the switch</div>        </td></tr>
+        <td><div>The username to use for authentication.</div></br>
+    <div style="font-size: small;">aliases: user<div>        </td></tr>
+                <tr><td>validate_certs<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, SSL certificates will not be validated.</div><div>This should only set to <code>no</code> used on personally controlled sites using self-signed certificates.</div>        </td></tr>
         </table>
     </br>
 
@@ -98,21 +117,23 @@ Examples
  ::
 
     
-    
-        aci_port_channel_interface:
-            action: "{{ action }}"
-            port_channel: "{{ port_channel }}"
-            max_link: "{{ max_link }}"
-            min_link: "{{ min_link }}"
-            mode: "{{ mode }}"
-            descr: "{{ descr }}"
-            host: "{{ inventory_hostname }}"
-            username: "{{ username }}"
-            password: "{{ password }}"
-            protocol: "{{ protocol }}"
-    
+    - aci_port_channel_interface:
+        hostname: '{{ inventory_hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        port_channel: '{{ port_channel }}'
+        description: '{{ description }}'
+        min_links: '{{ min_links }}'
+        max_links: '{{ max_links }}'
+        mode: '{{ mode }}'
 
 
+Notes
+-----
+
+.. note::
+    - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
+    - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 
 
 

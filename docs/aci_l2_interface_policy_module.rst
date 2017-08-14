@@ -1,8 +1,8 @@
 .. _aci_l2_interface_policy:
 
 
-aci_l2_interface_policy - Manage ACI Layer 2 interface policies
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_l2_interface_policy - Manage Layer 2 interface policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_l2_interface_policy - Manage ACI Layer 2 interface policies
 Synopsis
 --------
 
-* Manage ACI Layer 2 interface policies
+* Manage Layer 2 interface policies on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)

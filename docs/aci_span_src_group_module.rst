@@ -1,8 +1,8 @@
 .. _aci_span_src_group:
 
 
-aci_span_src_group - Direct access to the APIC API
-++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_span_src_group - Manage span source groups on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_span_src_group - Direct access to the APIC API
 Synopsis
 --------
 
-* Offers direct access to the APIC API
+* Manage span source groups on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -98,19 +98,17 @@ Examples
  ::
 
     
-    
-        aci_span_src_group: 
-    	action:"{{ action }}" 	
-    	tenant_name:"{{ tenant_name }}" 
-    	src_group:"{{ src_group }}" 
-    	dst_group:"{{ dst_group }}" 
-    	admin_state:"{{ admin_state }}" 
-    	descr:"{{ descr }}" 
-    	host:"{{ inventory_hostname }}" 
-    	username:"{{ username }}" 
-    	password:"{{ password }}"
-    	protocol: "{{ protocol }}"
-    
+    - aci_span_src_group:
+        action:"{{ action }}"
+        tenant_name:"{{ tenant_name }}"
+        src_group:"{{ src_group }}"
+        dst_group:"{{ dst_group }}"
+        admin_state:"{{ admin_state }}"
+        descr:"{{ descr }}"
+        host:"{{ inventory_hostname }}"
+        username:"{{ username }}"
+        password:"{{ password }}"
+        protocol: "{{ protocol }}"
 
 
 Notes

@@ -11,7 +11,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.0',
                     'supported_by': 'community'}
 
 DOCUMENTATION = r'''
-module: aci_bd_bind_l3out
+module: aci_bd_l3out_binding
 short_description: Manage Bridge Domain to L3 Out Bindings on Cisco ACI fabrics
 description:
 - Manage Bridge Domain to L3 Out Bindings on Cisco ACI fabrics.

@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = r'''
-module: aci_subject_bind_filter
+module: aci_subject_filter_binding
 short_description: Manage filters belonging to contracts on Cisco ACI fabrics
 description:
 - Manage Contract Subject to Filter Bindings on Cisco ACI fabrics.

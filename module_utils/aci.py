@@ -303,7 +303,7 @@ class ACIModule(object):
             # add name back to config only if the configs do not match
             if config:
                 # TODO: If URLs are built with the object's name, then we should be able to leave off adding the name back
-                config["name"] = proposed_config["name"]
+                # config["name"] = proposed_config["name"]
                 config = {aci_class: {'attributes': config}}
 
             # check for updates to child configs and update new config dictionary
@@ -311,7 +311,7 @@ class ACIModule(object):
             if children and config:
                 config[aci_class].update({'children': children})
             elif children:
-                config = {aci_class: {'attributes': {'name': proposed_config['name']}, 'children': children}}
+                config = {aci_class: {'attributes': {}, 'children': children}}
 
         else:
             config = self.result['proposed']
@@ -449,7 +449,7 @@ class ACIModule(object):
                               include child objects that are used to associate two MOs together. Children that represent
                               MOs should have their own module.
         """
-        proposed = dict((k, v) for k, v in class_config.items() if v)
+        proposed = dict((k, str(v)) for k, v in class_config.items() if v is not None)
         self.result['proposed'] = {aci_class: {'attributes': proposed}}
 
         # add child objects to proposed
@@ -462,6 +462,7 @@ class ACIModule(object):
                         if values is None:
                             child[root_key]['attributes'].pop(final_keys)
                         else:
+                            child[root_key]['attributes'][final_keys] = str(values)
                             has_value = True
                 if has_value:
                     children.append(child)

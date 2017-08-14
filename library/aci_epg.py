@@ -1,380 +1,192 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
-DOCUMENTATION = '''
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+ANSIBLE_METADATA = {'metadata_version': '1.0',
+                    'status': ['preview'],
+                    'supported_by': 'community'}
+
+DOCUMENTATION = r'''
 ---
-
 module: aci_epg
-short_description: Manage top level application network profile objects
+short_description: Manage end point groups on Cisco ACI fabrics
 description:
-    -  Manage top level application network profile object, i.e. this does
-      not manage EPGs.
-author: Cisco
+- Manage end point groups on Cisco ACI fabrics.
+author:
+- Swetha Chunduri (@schunduri)
+- Dag Wieers (@dagwieers)
+- Jacob Mcgill (@jmcgill298)
 requirements:
-    - ACI Fabric 1.0(3f)+
-notes: Tenant must be exist prior to using this module
+- ACI Fabric 1.0(3f)+
+notes:
+- The C(tenant) and C(app_profile) used must exist before using this module in your playbook.
+  The M(aci_tenant) and M(aci_anp) modules can be used for this.
 options:
-    action:
-        description:
-            - post or get
-        required: true
-        default: null
-        choices: ['post','get']
-        aliases: []
-    tenant_name:
-        description:
-            - Tenant Name
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   app_profile_name:
-        description:
-            -Application Profile Name
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   epg_name:
-        description:
-            -End Point Group Name
-        required: true
-        default: null
-        choices: []
-        aliases: []
-   bd_name:
-        description:
-            - Name of the Bridge Domain being associated to the EPG
-        required: true
-        default: null
-        choices: []
-        aliases: []     
-   priority:
-        description:
-            - Qos class 
-        required: false
-        default: unspecified
-        choices: ['level1', 'level2', 'level3', 'unspecified']
-        aliases: []
-   intra_epg_isolation:
-        description:
-            - Intra EPG Isolation
-        required:false
-        default: unenforced
-        choices: ['enforced', 'unenforced']
-        aliases: []
-    descr:
-        description:
-            - Description for the AEP
-        required: false
-        default: null
-        choices: []
-        aliases: []
-    contract_type:
-        description:
-            - Type of Contract being associated with the EPG[provider, consumer or both]
-        required: false
-        default: null
-        choices: ['provider','consumer', 'both']
-        aliases: []
-    contract_name_provider:
-        description:
-            - Name of the provider contract
-        required: false
-        default: null
-        choices: []
-        aliases: []
-    contract_name_consumer:
-        description:
-            - Name of the consumer contract
-        required: false
-        default: null
-        choices: []
-        aliases: [] 
-    priority_provider:
-        description:
-            - Qos value for the provider contract
-        required: false
-        default: 'unspecified'
-        choices: ['level1','level2', 'level3', 'unspecified']
-        aliases: []
-    priority_consumer:
-        description:
-            - Qos value for the consumer contract
-        required: false
-        default: 'unspecified'
-        choices: ['level1','level2', 'level3', 'unspecified']
-        aliases: []    
-    host:
-        description:
-            - IP Address or hostname of APIC resolvable by Ansible control host
-        required: true
-        default: null
-        choices: []
-        aliases: []
-    username:
-        description:
-            - Username used to login to the switch
-        required: true
-        default: 'admin'
-        choices: []
-        aliases: []
-    password:
-        description:
-            - Password used to login to the switch
-        required: true
-        default: null
-        choices: []
-        aliases:[]                                                                  
-    protocol:
-        description:
-            - Dictates connection protocol to use
-        required: false
-        default:'https'
-        choices: ['http', 'https']
-        aliases: []
+  tenant:
+    description:
+    - Name of an existing tenant.
+    aliases: [ tenant_name ]
+  app_profile:
+    description:
+    - Name of an existing application network profile, that will contain the EPGs.
+    required: yes
+    aliases: [ app_profile_name ]
+  epg:
+    description:
+    - Name of the end point group.
+    required: yes
+    aliases: [ name, epg_name ]
+  bridge_domain:
+    description:
+    - Name of the bridge domain being associated with the EPG.
+    required: yes
+    aliases: [ bd_name ]
+  priority:
+    description:
+    - QoS class.
+    choices: [ level1, level2, level3, unspecified ]
+    default: unspecified
+  intra_epg_isolation:
+    description:
+    - Intra EPG Isolation.
+    choices: [ enforced, unenforced ]
+    default: unenforced
+  description:
+    description:
+    - Description for the EPG.
+    aliases: [ descr ]
+  fwd_control:
+    description:
+    - The forwarding control used by the EPG.
+    - The APIC defaults new EPGs to none.
+    choices: [ none, proxy-arp ]
+    default: none
+  state:
+    description:
+    - Use C(present) or C(absent) for adding or removing.
+    - Use C(query) for listing an object or multiple objects.
+    choices: [ absent, present, query ]
+    default: present
+extends_documentation_fragment: aci
 '''
 
-EXAMPLES = '''
-
-    aci_epg:
-       action: "{{ action }}"
-       epg_name: ""{{ epg_name }}"
-       app_profile_name: "{{ app_profile_name }}"
-       tenant_name: "{{ tenant_name }}"
-       bd_name: "{{ bd_name }}"
-       priority: "{{ priority }}"
-       contract_type: "{{ contract_type }}"
-       contract_name_provider: "{{ contract_name_provider }}"
-       contract_name_consumer: "{{ contract_name_consumer }}"
-       priority_provider: "{{ priority_provider }}"
-       priority_consumer: "{{ priority_consumer }}"
-       intra_epg_isolation: "{{ intra_epg_isolation }}"
-       descr: "{{ descr }}"
-       host: "{{ inventory_hostname }}"
-       username: "{{ user }}"
-       password: "{{ pass }}"
-       protocol: "{{ protocol }}"
-
+EXAMPLES = r'''
+- name: Add a new EPG
+  aci_epg:
+    hostname: apic
+    username: admin
+    password: SomeSecretPassword
+    tenant: production
+    app_profile: default
+    epg: app_epg
+    description: application EPG
+    bridge_domain: vlan_bd
+    priority: unspecified
+    intra_epg_isolation: unenforced
+    state: present
+- name: Remove an EPG
+  aci_epg:
+    hostname: apic
+    username: admin
+    password: SomeSecretPassword
+    tenant: production
+    app_profile: default
+    epg: app_epg
+    state: absent
+- name: Query an EPG
+  aci_epg:
+    hostname: apic
+    username: admin
+    password: SomeSecretPassword
+    tenant: production
+    app_profile: default
+    epg: app_epg
+    state: query
+- name: Query all EPgs
+  aci_epg:
+    hostname: apic
+    username: admin
+    password: SomeSecretPassword
+    state: query
 '''
 
+RETURN = r'''
+#
+'''
 
-import socket
-import json
-import requests
+from ansible.module_utils.aci import ACIModule, aci_argument_spec
+from ansible.module_utils.basic import AnsibleModule
+
 
 def main():
-
-    ''' Ansible module to take all the parameter values from the playbook '''
-    module = AnsibleModule(
-        argument_spec=dict(
-            action=dict(choices=['post', 'get', 'delete']),
-            host=dict(required=True),
-            username=dict(type='str', default='admin'),
-            password=dict(type='str'),
-            protocol=dict(choices=['http', 'https'], default='https'),
-            epg_name=dict(type="str"),
-            contract_name_provider=dict(type="str"),
-            contract_name_consumer = dict(type="str"),
-            contract_type=dict(choices=['provider','consumer','both'], required=False),
-            priority_provider = dict(choices=['level1','level2','level3','unspecified'], required=False, default='unspecified'),
-            priority_consumer = dict(choices=['level1','level2','level3','unspecified'], required=False, default='unspecified'),
-            bd_name=dict(type="str"),
-            app_profile_name=dict(type="str"),
-            tenant_name=dict(type="str"),
-            descr=dict(type="str", required=False),
-            priority=dict(choices=['level1','level2','level3','unspecified'], required=False, default='unspecified'),
-            intra_epg_isolation=dict(choices=['enforced','unenforced'], default='unenforced'),
-        ),
-        supports_check_mode=False
+    argument_spec = aci_argument_spec
+    argument_spec.update(
+        epg=dict(type='str', aliases=['name', 'epg_name']),
+        bridge_domain=dict(type='str', aliases=['bd_name']),
+        app_profile=dict(type='str', aliases=['app_profile_name']),
+        tenant=dict(type='str', aliases=['tenant_name']),
+        description=dict(type='str', aliases=['descr']),
+        priority=dict(type='str', choices=['level1', 'level2', 'level3', 'unspecified']),
+        intra_epg_isolation=dict(choices=['enforced', 'unenforced']),
+        fwd_control=dict(type='str', choices=['none', 'proxy-arp']),
+        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
-    epg_name=module.params['epg_name']
-    app_profile_name=module.params['app_profile_name']
-    tenant_name=module.params['tenant_name']
-    bd_name = module.params['bd_name']
-    descr=module.params['descr']
-    descr=str(descr)
-    contract_name_provider = module.params['contract_name_provider']
-    contract_name_consumer = module.params['contract_name_consumer']
-    contract_type = module.params['contract_type']
-    priority_provider = module.params['priority_provider']
-    priority_consumer = module.params['priority_consumer']
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[['state', 'absent', ['app_profile', 'epg', 'tenant']],
+                     ['state', 'present', ['app_profile', 'epg', 'tenant']]]
+    )
+
+    epg = module.params['epg']
+    # app_profile = module.params['app_profile']
+    # tenant = module.params['tenant']
+    bridge_domain = module.params['bridge_domain']
+    description = module.params['description']
     priority = module.params['priority']
-    descr = str(descr)
-    priority=module.params['priority']
-    priority = str(priority)
-    intra_epg_isolation=module.params['intra_epg_isolation']
-    username = module.params['username']
-    password = module.params['password']
-    protocol = module.params['protocol']
-    host = socket.gethostbyname(module.params['host'])
-    action = module.params['action']
-    
-    ''' Config payload to enable the physical interface '''
-    if contract_type == "provider":
-       config_data = {
-        "fvAEPg":{
-          "attributes":{
-             "name": epg_name,
-             "descr": descr,
-             "prio": priority,
-             "pcEnfPref": intra_epg_isolation
-                  },
-            "children": [{
-                    "fvRsBd":{
-                      "attributes":{
-                          "tnFvBDName": bd_name
-                          }
-                     }
-                },
-                {
-                "fvRsProv":{
-                  "attributes":{
-                    "tnVzBrCPName": contract_name_provider,
-                    "prio" : priority_provider
-                    }
-                  } 
-                }
+    intra_epg_isolation = module.params['intra_epg_isolation']
+    fwd_control = module.params['fwd_control']
+    state = module.params['state']
 
-           ]
-       }
-    }
-    elif contract_type == "consumer":
-        config_data = {
-            "fvAEPg": {
-                "attributes": {
-                    "name": epg_name,
-                    "descr": descr,
-                    "prio": priority,
-                    "pcEnfPref": intra_epg_isolation
-                },
-                "children": [{
-                    "fvRsBd": {
-                        "attributes": {
-                            "tnFvBDName": bd_name
-                        }
-                    }
-                },
-                 {
-                    "fvRsCons": {
-                         "attributes": {
-                              "tnVzBrCPName": contract_name_consumer,
-                               "prio": priority_consumer
-                            }
-                        }
-                    }
+    aci = ACIModule(module)
 
-                ]
-            }
-        }
-    elif contract_type == "both":
-       config_data = {
-            "fvAEPg": {
-                "attributes": {
-                    "name": epg_name,
-                    "descr": descr,
-                    "prio": priority,
-                    "pcEnfPref": intra_epg_isolation
-                },
-                "children": [{
-                    "fvRsBd": {
-                        "attributes": {
-                            "tnFvBDName": bd_name
-                        }
-                    }
-                },
-                    {
-                        "fvRsProv": {
-                            "attributes": {
-                                "tnVzBrCPName": contract_name_provider,
-                                "prio": priority_provider
-                        }
-                    }
-            },
-            {
-                "fvRsCons": {
-                    "attributes": {
-                        "tnVzBrCPName": contract_name_consumer,
-                        "prio": priority_consumer
-                    }
-                }
-            }
-
-          ]
-        }
-    }
+    # TODO: Add logic to handle multiple input variations when query
+    if state != 'query':
+        # Work with a specific EPG
+        path = 'api/mo/uni/tn-%(tenant)s/ap-%(app_profile)s/epg-%(epg)s.json' % module.params
+        filter_string = '?rsp-subtree=children&rsp-subtree-class=fvRsBd&rsp-prop-include=config-only'
     else:
-        config_data = {
-            "fvAEPg": {
-                "attributes": {
-                    "name": epg_name,
-                    "descr": descr,
-                    "prio": priority,
-                    "pcEnfPref": intra_epg_isolation,
-                },
-                "children": [{
-                    "fvRsBd": {
-                        "attributes": {
-                            "tnFvBDName": bd_name,
-                        }
-                    }
-                }
-                ]
-            }
-      }
+        # Query all EPGs
+        path = 'api/class/fvAEPg.json'
+        filter_string = '?rsp-subtree=children&rsp-subtree-class=fvRsBd'
 
-    post_uri ='api/mo/uni/tn-'+tenant_name+'/ap-'+app_profile_name+'/epg-'+epg_name+'.json'
-    get_uri = 'api/node/class/fvAEPg.json'
+    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
 
-    
-    payload_data = json.dumps(config_data)
+    aci.get_existing(filter_string=filter_string)
 
-    ''' authentication || || Throw an error otherwise'''
-    apic = '{0}://{1}/'.format(protocol, host)
-    auth = dict(aaaUser=dict(attributes=dict(name=username, pwd=password)))
-    url=apic+'api/aaaLogin.json'
-    authenticate = requests.post(url, data=json.dumps(auth), timeout=2, verify=False)
+    if state == 'present':
+        # Filter out module parameters with null values
+        aci.payload(aci_class='fvAEPg', class_config=dict(name=epg, descr=description, prio=priority, pcEnfPref=intra_epg_isolation,
+                                                          fwdCtrl=fwd_control),
+                    child_configs=[dict(fvRsBd=dict(attributes=dict(tnFvBDName=bridge_domain)))])
 
-    if authenticate.status_code != 200:
-        module.fail_json(msg='could not authenticate to apic', status=authenticate.status_code, response=authenticate.text)
+        # Generate config diff which will be used as POST request body
+        aci.get_diff(aci_class='fvAEPg')
 
-    ''' Sending the request to APIC '''
-    if post_uri.startswith('/'):
-        post_uri = post_uri[1:]
-    post_url = apic + post_uri
+        # Submit changes if module not in check_mode and the proposed is different than existing
+        aci.post_config()
 
-    if get_uri.startswith('/'):
-        get_uri = get_uri[1:]
-    get_url = apic + get_uri
+    elif state == 'absent':
+        aci.delete_config()
 
-    if action == 'post':
-        req = requests.post(post_url, cookies=authenticate.cookies, data=payload_data, verify=False)
+    module.exit_json(**aci.result)
 
-    elif action == 'get':
-        req = requests.get(get_url, cookies=authenticate.cookies, data=payload_data, verify=False)
 
-    elif action == 'delete':
-        req = requests.delete(post_url, cookies=authenticate.cookies, data=payload_data, verify=False)
-    ''' Check response status and parse it for status || Throw an error otherwise '''
-    response = req.text
-    status = req.status_code
-    changed = False
-
-    if req.status_code == 200:
-        if action == 'post':
-            changed = True
-        else:
-            changed = False
-
-    else:
-        module.fail_json(msg='error issuing api request',response=response, status=status)
-
-    results = {}
-    results['status'] = status
-    results['response'] = response
-    results['changed'] = changed
-    module.exit_json(**results)
-
-from ansible.module_utils.basic import *
 if __name__ == "__main__":
     main()

@@ -13,250 +13,190 @@ ANSIBLE_METADATA = {'metadata_version': '1.0',
 DOCUMENTATION = r'''
 ---
 module: aci_epg_domain_binding
-short_description: Manage EPG physical domain binding on Cisco ACI fabrics
+short_description: Manage EPG to Domain bindings on Cisco ACI fabrics
 description:
-- Manage EPG physical domain binding on Cisco ACI fabrics.
+- Manage EPG to Physical and Virtual Domains on Cisco ACI fabrics.
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
-- Jacob McGill (@jmcgill298)
-version_added: '2.4'
+- Jacob Mcgill (@jmcgill298)
 requirements:
-    - ACI Fabric 1.0(3f)+
-    - Cobra SDK
+- ACI Fabric 1.0(3f)+
 notes:
-    - EPG Sould be existing
+- The C(tenant), C(app_profile), C(epg), and C(domain) used must exist before using this module in your playbook.
+  The M(aci_tenant) M(aci_anp), M(aci_epg) M(aci_domain) modules can be used for this.
 options:
-    action:
-        description:
-            -  post, get, or delete
-        required: true
-        choices: ['post', 'get', 'delete']
-    tenant_name:
-        description:
-            - Tenant Name
-        required: true
-    app_profile_name:
-        description:
-            - Application Profile Name
-        required: true
-    epg_name:
-        description:
-            - EPG Name
-        required: true
-    domain:
-        description:
-            - Dictates domain to be used
-        default: phys
-        choices: ['phys','vmm']
-    domain_profile:
-        description:
-            - Dictates domain profile to be attached
-        required: true
-    vlan_mode:
-        description:
-            - Dynamic | Static
-        default: dynamic
-        choices: ['dynamic', 'static']
-    encap:
-        description:
-            - Vlan encapsulation
-        required: true
-    deploy_immediacy:
-        description:
-            - On Demand | Immediate
-        default: on-demand
-        choices: ['on-demand','immediate']
-    resolution_immediacy:
-        description:
-            - On Demand | Immediate | Pre-Provision
-        default: on-demand
-        choices: ['on-demand','immediate', 'pre-provision']
-    netflow:
-        description:
-            - Enabled | Disabled
-        default: enabled
-        choices: ['enabled','disabled']
-    host:
-        description:
-            - IP Address or hostname of APIC resolvable by Ansible control host
-        required: true
-    username:
-        description:
-            - Username used to login to the switch
-        required: true
-        default: 'admin'
-    password:
-        description:
-            - Password used to login to the switch
-        required: true
-    protocol:
-        description:
-            - Dictates connection protocol to use
-        default: https
-        choices: ['http', 'https']
+  allow_useg:
+    description:
+    - Allows micro-segmentation.
+    - The APIC defaults new EPG to Domain bindings to use encap
+    type: str
+    choices: [ encap, useg ]
+    default: encap
+  app_profile:
+    description:
+    - Name of an existing application network profile, that will contain the EPGs.
+    type: str
+    aliases: [ app_profile_name ]
+  deploy_immediacy:
+    description:
+    - Determines when the policy is pushed to hardware Policy CAM.
+    - The APIC defaults new EPG to Domain bindings to lazy.
+    type: str
+    choices: [ immediate, lazy ]
+    default: lazy
+  domain_profile:
+    description:
+    - Name of the physical or virtual domain being associated with the EPG.
+    type: str
+    aliases: [ domain_name ]
+  domain_type:
+    description:
+    - Determines if the Domain is physical (phys) or virtual (vmm).
+    type: str
+    choices: [ phys, vmm ]
+    aliases: [ domain ]
+  encap:
+    description:
+    - The VLAN encapsulation for the EPG when binding a VMM Domain with static encap_mode.
+    - This acts as the secondary encap when using useg.
+    type: int
+    choices: [ range from 1 to 4096 ]
+  encap_mode:
+    description:
+    - The ecapsulataion method to be used.
+    - The APIC defaults new EPG to Domain bindings to be auto.
+    type: str
+    choices: [ auto, vlan, vxlan ]
+    default: auto
+  epg:
+    description:
+    - Name of the end point group.
+    type: str
+    aliases: [ epg_name ]
+  netflow:
+    description:
+    - Determines if netflow should be enabled.
+    - The APIC defaults new EPG to Domain binings to be disabled.
+    type: str
+    choices: [ disabled, enabled ]
+    default: disabled
+  primary_encap:
+    description:
+    - Determines the primary VLAN ID when using useg.
+    type: int
+    choices: [ range from 1 to 4096 ]
+  resolution_immediacy:
+    description:
+    - Determines when the policies should be resolved and available.
+    - The APIC defaults new EPG to Domain bindings to lazy.
+    choices: [ immediate, lazy, pre-provision ]
+    default: lazy
+  state:
+    description:
+    - Use C(present) or C(absent) for adding or removing.
+    - Use C(query) for listing an object or multiple objects.
+    choices: [ absent, present, query ]
+    default: present
+  tenant:
+    description:
+    - Name of an existing tenant.
+    type: str
+    aliases: [ tenant_name ]
+extends_documentation_fragment: aci
 '''
 
-EXAMPLES = r'''
-- name: Physical domain binding
-  aci_epg_domain_binding:
-    action: "{{ action }}"
-    tenant_name: "{{ tenant_name }}"
-    app_profile_name: "{{ app_profile_name }}"
-    epg_name: "{{ epg_name }}"
-    encap: "{{ encap }}"
-    domain: phys
-    domain_profile: "{{ domain_profile }}"
-    deploy_immediacy: "{{ deploy_immediacy }}"
-    resolution_immediacy: "{{ resolution_immediacy }}"
-    host: "{{ inventory_hostname }}"
-    username: "{{ user }}"
-    password: "{{ pass }}"
-    protocol: "{{ protocol }}"
+EXAMPLES = r''' # '''
 
-- name: VMM domain biniding
-  aci_epg_domain_binding:
-    action: "{{ action }}"
-    tenant_name: "{{ tenant_name }}"
-    app_profile_name: "{{ app_profile_name }}"
-    epg_name: "{{ epg_name }}"
-    encap: "{{ encap }}"
-    domain: vmm
-    domain_profile: "{{ domain_profile }}"
-    vlan_mode: "{{ vlan_mode }}"
-    deploy_immediacy: "{{ deploy_immediacy }}"
-    resolution_immediacy: "{{ resolution_immediacy }}"
-    host: "{{ inventory_hostname }}"
-    username: "{{ user }}"
-    password: "{{ pass }}"
-    protocol: "{{ protocol }}"
-'''
+RETURN = r''' # '''
 
-import socket
-import json
-import requests
-
+from ansible.module_utils.aci import ACIModule, aci_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 
 def main():
-    ''' Ansible module to take all the parameter values from the playbook '''
-    module = AnsibleModule(
-        argument_spec=dict(
-            action=dict(choices=['post', 'get', 'delete']),
-            tenant_name=dict(type='str', required=True),
-            app_profile_name=dict(type='str', required=True),
-            epg_name=dict(type='str', required=True),
-            domain=dict(choices=['phys', 'vmm'], default='phys'),
-            domain_profile=dict(type='str', required=True),
-            vlan_mode=dict(choices=['dynamic', 'static'], default='dynamic'),
-            encap=dict(type='str', required=False),
-            deploy_immediacy=dict(choices=['immediate', 'on-demand'], default='on-demand'),
-            resolution_immediacy=dict(choices=['immediate', 'on-demand', 'pre-provision'], default='on-demand'),
-            netflow=dict(choices=['enabled', 'disabled'], default='disabled'),
-            host=dict(required=True),
-            username=dict(type='str', default='admin'),
-            password=dict(type='str'),
-            protocol=dict(choices=['http', 'https'], default='https')
-        ),
-        supports_check_mode=False,
+    argument_spec = aci_argument_spec
+    argument_spec.update(
+        allow_useg=dict(type='str', choices=['encap', 'useg']),
+        app_profile=dict(type='str', aliases=['app_profile_name']),
+        deploy_immediacy=dict(type='str', choices=['immediate', 'on-demand']),
+        domain_profile=dict(type='str', aliases=['domain_name']),
+        domain_type=dict(type='str', choices=['phys', 'vmm'], aliases=['domain']),
+        encap=dict(type='int'),
+        encap_mode=dict(type='str', choices=['auto', 'vlan', 'vxlan']),
+        epg=dict(type='str', aliases=['name', 'epg_name']),
+        netflow=dict(type='str', choices=['disabled', 'enabled']),
+        primary_encap=dict(type='int'),
+        resolution_immediacy=dict(type='str', choices=['immdediate', 'lazy', 'pre-provision']),
+        tenant=dict(type='str', aliases=['tenant_name']),
+        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
-    tenant_name = module.params['tenant_name']
-    app_profile_name = module.params['app_profile_name']
-    epg_name = module.params['epg_name']
-    vlan_mode = module.params['vlan_mode']
-    netflow = module.params['netflow']
-    domain = module.params['domain']
-    if domain == 'vmm':
-        domain = 'vmmp-VMware/dom'
-    domain_profile = module.params['domain_profile']
-    encap = module.params['encap']
-    encap = str(encap)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[['state', 'absent', ['app_profile', 'domain_profile', 'domain_type', 'epg', 'tenant']],
+                     ['state', 'present', ['app_profile', 'domain_profile', 'domain_type', 'epg', 'tenant']]]
+    )
+
+    allow_useg = module.params['allow_useg']
+    # app_profile = module.params['app_profile']
     deploy_immediacy = module.params['deploy_immediacy']
-    if deploy_immediacy == 'on-demand':
-        deploy_immediacy = 'lazy'
-    resolution_immediacy = module.params['resolution_immediacy']
-    if resolution_immediacy == 'on-demand':
-        resolution_immediacy = 'lazy'
-    username = module.params['username']
-    password = module.params['password']
-    protocol = module.params['protocol']
-    host = socket.gethostbyname(module.params['host'])
-
-    action = module.params['action']
-
-    post_uri = '/api/mo/uni/tn-' + tenant_name + '/ap-' + app_profile_name + '/epg-' + epg_name + '/rsdomAtt-[uni/' + domain + '-' + domain_profile + '].json'
-    get_uri = '/api/node/class/fvRsDomAtt.json'
-
-    config_data = {
-        "fvRsDomAtt": {
-            "attributes": {
-                "encap": 'vlan-' + encap,
-                "instrImedcy": deploy_immediacy,
-                "netflowPref": netflow,
-                "resImedcy": resolution_immediacy,
-            }
-        }
-    }
-
-    if domain == "vmmp-VMware/dom" and vlan_mode == 'dynamic':
-        del config_data['fvRsDomAtt']['attributes']['encap']
-
-    if domain == "phys":
-        del config_data['fvRsDomAtt']['attributes']['netflowPref']
-
-    payload_data = json.dumps(config_data)
-
-    ''' authentication || || Throw an error otherwise'''
-    apic = "{0}://{1}/".format(protocol, host)
-
-    auth = dict(aaaUser=dict(attributes=dict(name=username, pwd=password)))
-    url = apic + 'api/aaaLogin.json'
-
-    authenticate = requests.post(url, data=json.dumps(auth), timeout=2, verify=False)
-
-    if authenticate.status_code != 200:
-        module.fail_json(msg='could not authenticate to apic', status=authenticate.status_code, response=authenticate.text)
-
-    ''' Sending the request to APIC '''
-    if post_uri.startswith('/'):
-        post_uri = post_uri[1:]
-    post_url = apic + post_uri
-
-    if get_uri.startswith('/'):
-        get_uri = get_uri[1:]
-    get_url = apic + get_uri
-
-    if action == 'post':
-        req = requests.post(post_url, cookies=authenticate.cookies,
-                            data=payload_data, verify=False)
-    elif action == 'get':
-        req = requests.get(get_url, cookies=authenticate.cookies,
-                           data=payload_data, verify=False)
-    elif action == 'delete':
-        req = requests.delete(post_url, cookies=authenticate.cookies, data=payload_data, verify=False)
-
-    ''' Check response status and parse it for status || Throw an error otherwise '''
-    response = req.text
-    status = req.status_code
-
-    changed = False
-    if req.status_code == 200:
-        if action == 'post':
-            changed = True
+    # domain_profile = module.params['domain_profile']
+    domain_type = module.params['domain_type']
+    if domain_type == 'vmm':
+        module.params["domain_type"] = 'vmmp-VMware/dom'
+    encap = module.params['encap']
+    if encap is not None:
+        if encap in range(1, 4097):
+            encap = 'vlan-{}'.format(encap)
         else:
-            changed = False
+            module.fail_json(msg='Valid VLAN assigments are from 1 to 4096')
+    encap_mode = module.params['encap_mode']
+    # epg = module.params['epg']
+    # tenant = module.params['tenant']
+    netflow = module.params['netflow']
+    primary_encap = module.params['primary_encap']
+    if primary_encap is not None:
+        if primary_encap in range(1, 4097):
+            primary_encap = 'vlan-{}'.format(primary_encap)
+        else:
+            module.fail_json(msg='Valid VLAN assigments are from 1 to 4096')
+    resolution_immediacy = module.params['resolution_immediacy']
+    state = module.params['state']
+
+    aci = ACIModule(module)
+
+    # TODO: Add logic to handle multiple input variations when query
+    if state != 'query':
+        # Work with a specific EPG
+        path = ('api/mo/uni/tn-%(tenant)s/ap-%(app_profile)s/epg-%(epg)s/'
+                'rsdomAtt-[uni/%(domain_type)s-%(domain_profile)s].json') % module.params
     else:
-        module.fail_json(msg='error issuing api request',
-                         response=response, status=status)
+        # Query all EPGs
+        path = 'api/class/fvRsDomAtt.json'
 
-    results = {}
-    results['status'] = status
-    results['response'] = response
-    results['changed'] = changed
+    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
 
-    module.exit_json(**results)
+    aci.get_existing()
+
+    if state == 'present':
+        # Filter out module parameters with null values
+        aci.payload(aci_class='fvRsDomAtt',
+                    class_config=dict(classPref=allow_useg, encap=encap, encapMode=encap_mode, instrImedcy=deploy_immediacy,
+                                      netflowPref=netflow, primaryEncap=primary_encap, resImedcy=resolution_immediacy))
+
+        # Generate config diff which will be used as POST request body
+        aci.get_diff(aci_class='fvRsDomAtt')
+
+        # Submit changes if module not in check_mode and the proposed is different than existing
+        aci.post_config()
+
+    elif state == 'absent':
+        aci.delete_config()
+
+    module.exit_json(**aci.result)
 
 
 if __name__ == "__main__":

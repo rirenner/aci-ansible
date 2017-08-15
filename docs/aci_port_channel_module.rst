@@ -1,8 +1,8 @@
-.. _aci_action_rule_profile:
+.. _aci_port_channel_interface:
 
 
-aci_action_rule_profile - Manage action rule profiles on Cisco ACI fabrics
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_port_channel_interface - Manage port channel interface policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_action_rule_profile - Manage action rule profiles on Cisco ACI fabrics
 Synopsis
 --------
 
-* Manage action rule profiles on Cisco ACI fabrics.
+* Manage port channel interface policies on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,17 +37,11 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>action_rule<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td></td>
-        <td><div>The name of the action rule profile.</div></br>
-    <div style="font-size: small;">aliases: action_rule_name, name<div>        </td></tr>
                 <tr><td>description<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Description for the action rule profile.</div></br>
+        <td><div>Description for the port channel.</div></br>
     <div style="font-size: small;">aliases: descr<div>        </td></tr>
                 <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
@@ -55,22 +49,37 @@ Options
         <td></td>
         <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
     <div style="font-size: small;">aliases: host<div>        </td></tr>
+                <tr><td>max_links<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>Maximum links (range 1-16).</div><div>The APIC defaults new Port Channel Policies to a max links of 16.</div>        </td></tr>
+                <tr><td>min_links<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>Minimum links (range 1-16).</div><div>The APIC defaults new Port Channel Policies to a min links of 1.</div>        </td></tr>
+                <tr><td>mode<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>active</li><li>mac-pin</li><li>mac-pin-nicload</li><li>False</li><li>passive</li></ul></td>
+        <td><div>Port channel interface policy mode.</div><div>Determines the LACP method to use for forming port-channels.</div><div>The APIC defaults new Port Channel Polices to a off mode.</div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
         <td><div>The password to use for authentication.</div>        </td></tr>
+                <tr><td>port_channel<br/><div style="font-size: small;"></div></td>
+    <td>yes</td>
+    <td></td>
+        <td></td>
+        <td><div>Name of the port channel.</div></br>
+    <div style="font-size: small;">aliases: name<div>        </td></tr>
                 <tr><td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
         <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
         <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
-                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td></td>
-        <td><div>The name of the tenant.</div></br>
-    <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
                 <tr><td>timeout<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>30</td>
@@ -108,20 +117,21 @@ Examples
  ::
 
     
-    - aci_action_rule_profile:
+    - aci_port_channel:
         hostname: '{{ inventory_hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'
-        action_rule: '{{ action_rule }}'
-        description: '{{ descr }}'
-        tenant: '{{ tenant }}'
+        port_channel: '{{ port_channel }}'
+        description: '{{ description }}'
+        min_links: '{{ min_links }}'
+        max_links: '{{ max_links }}'
+        mode: '{{ mode }}'
 
 
 Notes
 -----
 
 .. note::
-    - The tenant used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` module can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 

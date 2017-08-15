@@ -1,8 +1,8 @@
-.. _aci_l2_interface_policy:
+.. _aci_l2_policy:
 
 
-aci_l2_interface_policy - Manage Layer 2 interface policies on Cisco ACI fabrics
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_l2_policy - Manage Layer 2 interface policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -107,7 +107,7 @@ Examples
  ::
 
     
-    - aci_l2_interface_policy:
+    - aci_l2_policy:
         hostname: '{{ hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'

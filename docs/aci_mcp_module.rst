@@ -1,8 +1,8 @@
-.. _aci_mcp_interface:
+.. _aci_mcp:
 
 
-aci_mcp_interface - Manage MCP interface policies on Cisco ACI fabrics
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_mcp - Manage MCP interface policies on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -54,12 +54,12 @@ Options
         <td></td>
         <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
     <div style="font-size: small;">aliases: host<div>        </td></tr>
-                <tr><td>mcp_interface<br/><div style="font-size: small;"></div></td>
+                <tr><td>mcp<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
         <td><div>The name of the MCP interface.</div></br>
-    <div style="font-size: small;">aliases: name<div>        </td></tr>
+    <div style="font-size: small;">aliases: mcp_interface, name<div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
@@ -107,11 +107,11 @@ Examples
  ::
 
     
-    - aci_mcp_interface:
+    - aci_mcp:
         hostname: '{{ hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'
-        mcp_interface: '{{ mcp_interface }}'
+        mcp: '{{ mcp }}'
         description: '{{ descr }}'
         admin_state: '{{ admin_state }}'
 

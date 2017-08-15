@@ -15,7 +15,8 @@ aci_anp - Manage top level application network profile objects on Cisco ACI fabr
 Synopsis
 --------
 
-* Manage top level application network profile object, i.e. this does not manage EPGs.
+* Manage top level application network profile objects on Cisco ACI fabrics
+* This modules does not manage EPGs, see :ref:`aci_epg <aci_epg>` to do this.
 
 
 Requirements (on host that executes module)
@@ -37,46 +38,65 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>action<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-        <td><ul><li>post</li><li>get</li><li>delete</li></ul></td>
-        <td><div>post, get or delete</div>        </td></tr>
-                <tr><td>app_profile_name<br/><div style="font-size: small;"></div></td>
+                <tr><td>app_profile<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Tenant Name</div>        </td></tr>
+        <td><div>The name of the application network profile.</div></br>
+    <div style="font-size: small;">aliases: app_profile_name, name<div>        </td></tr>
                 <tr><td>descr<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Description for the AEP</div>        </td></tr>
-                <tr><td>host<br/><div style="font-size: small;"></div></td>
+        <td><div>Description for the ANP.</div>        </td></tr>
+                <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>IP Address or hostname of APIC resolvable by Ansible control host</div>        </td></tr>
+        <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
+    <div style="font-size: small;">aliases: host<div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Password used to login to the switch</div>        </td></tr>
-                <tr><td>protocol<br/><div style="font-size: small;"></div></td>
+        <td><div>The password to use for authentication.</div>        </td></tr>
+                <tr><td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>https</td>
-        <td><ul><li>http</li><li>https</li></ul></td>
-        <td><div>Dictates connection protocol to use</div>        </td></tr>
-                <tr><td>tenant_name<br/><div style="font-size: small;"></div></td>
+    <td>present</td>
+        <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
+        <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
+                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
-        <td><div>Tenant Name</div>        </td></tr>
+        <td><div>The name of an existing tenant.</div></br>
+    <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
+                <tr><td>timeout<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>30</td>
+        <td></td>
+        <td><div>The socket level timeout in seconds.</div>        </td></tr>
+                <tr><td>use_proxy<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, it will not use a proxy, even if one is defined in an environment variable on the target hosts.</div>        </td></tr>
+                <tr><td>use_ssl<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, an HTTP connection will be used instead of the default HTTPS connection.</div>        </td></tr>
                 <tr><td>username<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td>admin</td>
         <td></td>
-        <td><div>Username used to login to the switch</div>        </td></tr>
+        <td><div>The username to use for authentication.</div></br>
+    <div style="font-size: small;">aliases: user<div>        </td></tr>
+                <tr><td>validate_certs<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>yes</td>
+        <td><ul><li>yes</li><li>no</li></ul></td>
+        <td><div>If <code>no</code>, SSL certificates will not be validated.</div><div>This should only set to <code>no</code> used on personally controlled sites using self-signed certificates.</div>        </td></tr>
         </table>
     </br>
 
@@ -88,65 +108,49 @@ Examples
  ::
 
     
-    - aci_anp:
-        action: "{{ action }}"
-        app_profile_name: "{{ app_profile_name }}"
-        tenant_name: "{{ tenant_name }}"
-        descr: "{{ descr }}"
-        host: "{{ inventory_hostname }}"
-        username: "{{ user }}"
-        password: "{{ pass }}"
-        protocol: "{{ protocol }}"
+    - name: Add a new ANP
+      aci_anp:
+        hostname: apic
+        username: admin
+        password: SomeSecretPassword
+        tenant: production
+        app_profile: default
+        description: default ap
+        state: present
+    
+    - name: Remove an ANP
+      aci_anp:
+        hostname: apic
+        username: admin
+        password: SomeSecretPassword
+        tenant: production
+        app_profile: default
+        state: absent
+    
+    - name: Query an ANP
+      aci_anp:
+        hostname: apic
+        username: admin
+        password: SomeSecretPassword
+        tenant: production
+        app_profile: default
+        state: query
+    
+    - name: Query all ANPs
+      aci_anp:
+        hostname: apic
+        username: admin
+        password: SomeSecretPassword
+        state: query
 
 
 Notes
 -----
 
 .. note::
-    - T
-    - e
-    - n
-    - a
-    - n
-    - t
-    -  
-    - m
-    - u
-    - s
-    - t
-    -  
-    - e
-    - x
-    - i
-    - s
-    - t
-    -  
-    - p
-    - r
-    - i
-    - o
-    - r
-    -  
-    - t
-    - o
-    -  
-    - u
-    - s
-    - i
-    - n
-    - g
-    -  
-    - t
-    - h
-    - i
-    - s
-    -  
-    - m
-    - o
-    - d
-    - u
-    - l
-    - e
+    - The tenant used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` module can be used for this.
+    - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
+    - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 
 
 

@@ -1,8 +1,8 @@
-.. _aci_lldp_interface_policy:
+.. _aci_lldp_policy:
 
 
-aci_lldp_interface_policy - Manage LLDP interface policies on Cisco ACI fabrics
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_lldp_policy - Manage LLDP interface policies on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -75,7 +75,7 @@ Examples
  ::
 
     
-    - aci_lldp_interface_policy:
+    - aci_lldp_policy:
         hostname: '{{ hostname }}'
         username: '{{ username }}'
         password: '{{ password }}'

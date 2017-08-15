@@ -1,8 +1,8 @@
-.. _aci_epg_domain_binding:
+.. _aci_subject_filter_binding:
 
 
-aci_epg_domain_binding - Manage EPG to Domain bindings on Cisco ACI fabrics
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_subject_filter_binding - Manage filters belonging to contracts on Cisco ACI fabrics
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_epg_domain_binding - Manage EPG to Domain bindings on Cisco ACI fabrics
 Synopsis
 --------
 
-* Manage EPG to Physical and Virtual Domains on Cisco ACI fabrics.
+* Manage Contract Subject to Filter Bindings on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,86 +37,50 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>allow_useg<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>encap</td>
-        <td><ul><li>encap</li><li>useg</li></ul></td>
-        <td><div>Allows micro-segmentation.</div><div>The APIC defaults new EPG to Domain bindings to use encap</div>        </td></tr>
-                <tr><td>app_profile<br/><div style="font-size: small;"></div></td>
+                <tr><td>contract<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Name of an existing application network profile, that will contain the EPGs.</div></br>
-    <div style="font-size: small;">aliases: app_profile_name<div>        </td></tr>
-                <tr><td>deploy_immediacy<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>lazy</td>
-        <td><ul><li>immediate</li><li>lazy</li></ul></td>
-        <td><div>Determines when the policy is pushed to hardware Policy CAM.</div><div>The APIC defaults new EPG to Domain bindings to lazy.</div>        </td></tr>
-                <tr><td>domain_profile<br/><div style="font-size: small;"></div></td>
+        <td><div>The name of the contract.</div></br>
+    <div style="font-size: small;">aliases: contract_name<div>        </td></tr>
+                <tr><td>filter_name<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Name of the physical or virtual domain being associated with the EPG.</div></br>
-    <div style="font-size: small;">aliases: domain_name<div>        </td></tr>
-                <tr><td>domain_type<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul><li>phys</li><li>vmm</li></ul></td>
-        <td><div>Determines if the Domain is physical (phys) or virtual (vmm).</div></br>
-    <div style="font-size: small;">aliases: domain<div>        </td></tr>
-                <tr><td>encap<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul><li>range from 1 to 4096</li></ul></td>
-        <td><div>The VLAN encapsulation for the EPG when binding a VMM Domain with static encap_mode.</div><div>This acts as the secondary encap when using useg.</div>        </td></tr>
-                <tr><td>encap_mode<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>auto</td>
-        <td><ul><li>auto</li><li>vlan</li><li>vxlan</li></ul></td>
-        <td><div>The ecapsulataion method to be used.</div><div>The APIC defaults new EPG to Domain bindings to be auto.</div>        </td></tr>
-                <tr><td>epg<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td></td>
-        <td><div>Name of the end point group.</div></br>
-    <div style="font-size: small;">aliases: epg_name<div>        </td></tr>
+        <td><div>The name of the Filter to bind to the Subject.</div>        </td></tr>
                 <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
         <td><div>IP Address or hostname of APIC resolvable by Ansible control host.</div></br>
     <div style="font-size: small;">aliases: host<div>        </td></tr>
-                <tr><td>netflow<br/><div style="font-size: small;"></div></td>
+                <tr><td>log<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td>disabled</td>
-        <td><ul><li>disabled</li><li>enabled</li></ul></td>
-        <td><div>Determines if netflow should be enabled.</div><div>The APIC defaults new EPG to Domain binings to be disabled.</div>        </td></tr>
+    <td></td>
+        <td><ul><li>log</li><li>none</li></ul></td>
+        <td><div>Determines if the binding should be set to log.</div><div>The APIC defaults new Subject to Filter bindings to a value of none.</div></br>
+    <div style="font-size: small;">aliases: directive<div>        </td></tr>
                 <tr><td>password<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
         <td></td>
         <td><div>The password to use for authentication.</div>        </td></tr>
-                <tr><td>primary_encap<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td><ul><li>range from 1 to 4096</li></ul></td>
-        <td><div>Determines the primary VLAN ID when using useg.</div>        </td></tr>
-                <tr><td>resolution_immediacy<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td>lazy</td>
-        <td><ul><li>immediate</li><li>lazy</li><li>pre-provision</li></ul></td>
-        <td><div>Determines when the policies should be resolved and available.</div><div>The APIC defaults new EPG to Domain bindings to lazy.</div>        </td></tr>
                 <tr><td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
         <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
         <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
-                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
+                <tr><td>subject<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Name of an existing tenant.</div></br>
+        <td><div>The name of the Contract Subject.</div></br>
+    <div style="font-size: small;">aliases: subject_name<div>        </td></tr>
+                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
+    <td>yes</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the tenant.</div></br>
     <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
                 <tr><td>timeout<br/><div style="font-size: small;"></div></td>
     <td>no</td>
@@ -154,14 +118,24 @@ Examples
 
  ::
 
-     # 
+    
+    - aci_subject_filter_binding:
+        hostname: '{{ inventory_hostname }}'
+        username: '{{ username }}'
+        password: '{{ password }}'
+        tenant: '{{ tenant }}'
+        contract: '{{ contract }}'
+        subject: '{{ subject }}'
+        filter_name: '{{ filter_name }}'
+        log: '{{ log }}'
 
 
 Notes
 -----
 
 .. note::
-    - The ``tenant``, ``app_profile``, ``epg``, and ``domain`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` :ref:`aci_anp <aci_anp>`, :ref:`aci_epg <aci_epg>` :ref:`aci_domain <aci_domain>` modules can be used for this.
+    - The ``tenant``, ``contract``, ``subject``, and ``filter_name`` must exist before using this module in your playbook.
+    - The :ref:`aci_tenant <aci_tenant>`, :ref:`aci_contract <aci_contract>`, :ref:`aci_contract_subject <aci_contract_subject>`, and :ref:`aci_filter <aci_filter>` modules can be used for these.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 

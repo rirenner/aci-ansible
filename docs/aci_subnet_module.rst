@@ -1,8 +1,8 @@
-.. _aci_contract:
+.. _aci_subnet:
 
 
-aci_contract - Manage subnets on Cisco ACI fabrics
-++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_subnet - Manage subnets on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -64,11 +64,6 @@ Options
         <td><ul><li>Any 0 to 32 for IPv4 Addresses</li><li>0-128 for IPv6 Addresses</li></ul></td>
         <td><div>The subnet mask for the Subnet.</div><div>{u'This is the number assocated with CIDR notation (EX': u'24 should be supplied for a /24)'}</div></br>
     <div style="font-size: small;">aliases: subnet_mask<div>        </td></tr>
-                <tr><td>name<br/><div style="font-size: small;"></div></td>
-    <td>no</td>
-    <td></td>
-        <td></td>
-        <td><div>The name of the Subnet.</div>        </td></tr>
                 <tr><td>nd_prefix_policy<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
@@ -99,6 +94,12 @@ Options
     <td></td>
         <td><ul><li>nd_ra</li><li>no_gw</li><li>querier_ip</li><li>unspecified</li></ul></td>
         <td><div>Determines the Subnet's Control State.</div><div>The querier_ip option is used to treat the gateway_ip as an IGMP querier source IP.</div><div>The nd_ra option is used to treate the gateway_ip address as a Neighbor Discovery Router Advertisement Prefix.</div><div>The no_gw option is used to remove default gateway functionality from the gateway address.</div><div>The APIC defaults new Subnets to ND RA.</div>        </td></tr>
+                <tr><td>subnet_name<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the Subnet.</div></br>
+    <div style="font-size: small;">aliases: name<div>        </td></tr>
                 <tr><td>tenant<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>

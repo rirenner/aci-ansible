@@ -18,6 +18,8 @@ People interested in contributing to this project are welcome to join.
   Manage attachable entity profile on Cisco ACI fabrics
 - [aci_anp](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_anp_module.rst) -
   Manage top level application network profile objects on Cisco ACI fabrics
+- [aci_bd_l3out_binding](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_bd_l3out_binding_module.rst) -
+  Manage Bridge Domain to L3 Out Bindings on Cisco ACI fabrics
 - [aci_bridge_domain](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_bridge_domain_module.rst) -
   Manage bridge domains on Cisco ACI fabrics
 - [aci_context](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_context_module.rst) -
@@ -42,19 +44,19 @@ People interested in contributing to this project are welcome to join.
   Manages top level filter objects on Cisco ACI fabrics
 - [aci_filter_entry](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_filter_entry_module.rst) -
   Manage filter entries on Cisco ACI fabrics
-- [aci_l2_interface_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_l2_interface_policy_module.rst) -
+- [aci_l2_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_l2_policy_module.rst) -
   Manage Layer 2 interface policies on Cisco ACI fabrics
 - [aci_l3out](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_l3out_module.rst) -
   Manage Layer 3 out association to bridge domains on Cisco ACI fabrics
-- [aci_lldp_interface_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_lldp_interface_policy_module.rst) -
+- [aci_lldp_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_lldp_policy_module.rst) -
   Manage LLDP interface policies on Cisco ACI fabrics
 - [aci_login_domain](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_login_domain_module.rst) -
   Manage login domains on Cisco ACI fabrics
-- [aci_mcp_interface](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_mcp_interface_module.rst) -
+- [aci_mcp](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_mcp_module.rst) -
   Manage MCP interface policies on Cisco ACI fabrics
 - [aci_monitoring_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_monitoring_policy_module.rst) -
   Manage monitoring policies on Cisco ACI fabrics
-- [aci_port_channel_interface](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_port_channel_interface_module.rst) -
+- [aci_port_channel](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_port_channel_module.rst) -
   Manage port channel interface policies on Cisco ACI fabrics
 - [aci_port_security](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_port_security_module.rst) -
   Manage port security on Cisco ACI fabrics
@@ -66,6 +68,8 @@ People interested in contributing to this project are welcome to join.
   Manage span destination groups on Cisco ACI fabrics
 - [aci_span_src_group](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_span_src_group_module.rst) -
   Manage span source groups on Cisco ACI fabrics
+- [aci_subject_filter_binding](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_subject_filter_binding_module.rst) -
+  Manage filters belonging to contracts on Cisco ACI fabrics
 - [aci_subnet](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_subnet_module.rst) -
   Manage subnets on Cisco ACI fabrics
 - [aci_taboo_contract](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_taboo_contract_module.rst) -

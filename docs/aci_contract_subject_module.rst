@@ -1,8 +1,8 @@
-.. _aci_aep:
+.. _aci_contract_subject:
 
 
-aci_aep - Manage Attachable Access Entity Profile on Cisco ACI Fabric
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_contract_subject - Manage initial contract subjects on Cisco ACI fabrics
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,7 +15,7 @@ aci_aep - Manage Attachable Access Entity Profile on Cisco ACI Fabric
 Synopsis
 --------
 
-* Connect to external virtual and physical domains by using Attachable Access Entity Profiles on Cisco ACI Fabric.
+* Manage initial contract subjects on Cisco ACI fabrics.
 
 
 Requirements (on host that executes module)
@@ -37,17 +37,28 @@ Options
     <th class="head">choices</th>
     <th class="head">comments</th>
     </tr>
-                <tr><td>aep<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+                <tr><td>consumer_match<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>all</li><li>at_least_one</li><li>at_most_one</li><li>none</li></ul></td>
+        <td><div>The match criteria across consumers.</div><div>The APIC defaults new Contract Subjects to a value of at_least_one.</div>        </td></tr>
+                <tr><td>contract<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
     <td></td>
         <td></td>
-        <td><div>The name of the Attachable Access Entity Profile.</div></br>
-    <div style="font-size: small;">aliases: aep_name, name<div>        </td></tr>
+        <td><div>The name of the Contract.</div></br>
+    <div style="font-size: small;">aliases: contract_name<div>        </td></tr>
                 <tr><td>description<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
         <td></td>
-        <td><div>Description for the AEP.</div>        </td></tr>
+        <td><div>Description for the contract subject.</div>        </td></tr>
+                <tr><td>dscp<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>AF11</li><li>AF12</li><li>AF13</li><li>AF21</li><li>AF22</li><li>AF23</li><li>AF31</li><li>AF32</li><li>AF33</li><li>AF41</li><li>AF42</li><li>AF43</li><li>CS0</li><li>CS1</li><li>CS2</li><li>CS3</li><li>CS4</li><li>CS5</li><li>CS6</li><li>CS7</li><li>EF</li><li>VA</li><li>unspecified</li></ul></td>
+        <td><div>The target DSCP.</div><div>The APIC defaults new Contract Subjects to a target DSCP of unspecified.</div></br>
+    <div style="font-size: small;">aliases: target<div>        </td></tr>
                 <tr><td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
@@ -59,11 +70,38 @@ Options
     <td></td>
         <td></td>
         <td><div>The password to use for authentication.</div>        </td></tr>
+                <tr><td>priority<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>level1</li><li>level2</li><li>level3</li><li>unspecified</li></ul></td>
+        <td><div>The QoS class.</div><div>The APIC defaults new Contract Subjects to a priority of unspecified.</div>        </td></tr>
+                <tr><td>provider_match<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>all</li><li>at_least_one</li><li>at_most_one</li><li>none</li></ul></td>
+        <td><div>The match criteria across providers.</div><div>The APIC defaults new Contract Subjects to a value of at_least_one.</div>        </td></tr>
+                <tr><td>reverse_filter<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td><ul><li>True</li><li>False</li></ul></td>
+        <td><div>Determines if the APIC should reverse the src and dst ports to allow the return traffic back, since ACI is stateless filter.</div><div>The APIC defaults new Contract Subjects to a reverse filter of yes.</div>        </td></tr>
                 <tr><td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
         <td><ul><li>absent</li><li>present</li><li>query</li></ul></td>
         <td><div>Use <code>present</code> or <code>absent</code> for adding or removing.</div><div>Use <code>query</code> for listing an object or multiple objects.</div>        </td></tr>
+                <tr><td>subject<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The contract subject name.</div></br>
+    <div style="font-size: small;">aliases: name, subject_name<div>        </td></tr>
+                <tr><td>tenant<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+        <td></td>
+        <td><div>The name of the tenant.</div></br>
+    <div style="font-size: small;">aliases: tenant_name<div>        </td></tr>
                 <tr><td>timeout<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>30</td>
@@ -101,33 +139,42 @@ Examples
  ::
 
     
-    - name: Add a new AEP
-      aci_aep:
+    - name: Add a new contract subject
+      aci_contract_subject:
         hostname: apic
         username: admin
         password: SomeSecretPassword
-        aep: ACI-AEP
-        description: default
+        tenant: production
+        contract: web_to_db
+        subject: default
+        description: test
+        reverse_filter: yes
+        priority: level1
+        dscp: unspecified
         state: present
     
-    - name: Remove an existing AEP
-      aci_aep:
+    - name: Remove a contract subject
+      aci_contract_subject:
         hostname: apic
         username: admin
         password: SomeSecretPassword
-        aep: ACI-AEP
+        tenant: production
+        contract: web_to_db
+        subject: default
         state: absent
     
-    - name: Query an AEP
-      aci_aep:
+    - name: Query a contract subject
+      aci_contract_subject:
         hostname: apic
         username: admin
         password: SomeSecretPassword
-        aep: ACI-AEP
+        tenant: production
+        contract: web_to_db
+        subject: default
         state: query
     
-    - name: Query all AEPs
-      aci_aep:
+    - name: Query all contract subjects
+      aci_contract_subject:
         hostname: apic
         username: admin
         password: SomeSecretPassword
@@ -138,6 +185,8 @@ Notes
 -----
 
 .. note::
+    - The ``tenant``, ``subject``, and ``contract`` used must exist before using this module in your playbook.
+    - The :ref:`aci_tenant <aci_tenant>`, :ref:`aci_subject <aci_subject>`, and :ref:`aci_contract <aci_contract>` modules can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 

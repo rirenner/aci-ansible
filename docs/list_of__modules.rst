@@ -4,17 +4,18 @@
 .. toctree:: :maxdepth: 1
 
   aci_action_rule_profile - Manage action rule profiles on Cisco ACI fabrics <aci_action_rule_profile_module>
-  aci_aep - Manage attachable entity profile on Cisco ACI fabrics <aci_aep_module>
+  aci_aep - Manage Attachable Access Entity Profile on Cisco ACI Fabric <aci_aep_module>
   aci_anp - Manage top level application network profile objects on Cisco ACI fabrics <aci_anp_module>
   aci_bd_l3out_binding - Manage Bridge Domain to L3 Out Bindings on Cisco ACI fabrics <aci_bd_l3out_binding_module>
   aci_bridge_domain - Manage Bridge Domains on Cisco ACI Fabrics <aci_bridge_domain_module>
   aci_context - Manage private networks (aka. contexts) on Cisco ACI fabrics <aci_context_module>
   aci_contract - Manage contract resources on Cisco ACI fabrics <aci_contract_module>
-  aci_contract_subjects - Manage initial contract subjects on Cisco ACI fabrics <aci_contract_subjects_module>
+  aci_contract_subject - Manage initial contract subjects on Cisco ACI fabrics <aci_contract_subject_module>
   aci_dhcp_association - Manage DHCP Relay Labels in bridge domains on Cisco ACI fabrics <aci_dhcp_association_module>
   aci_epg - Manage end point groups on Cisco ACI fabrics <aci_epg_module>
   aci_epg_domain_binding - Manage EPG to Domain bindings on Cisco ACI fabrics <aci_epg_domain_binding_module>
   aci_epr - Manage end point retention policies on Cisco ACI fabrics <aci_epr_module>
+  aci_epr_policy - Manage end point retention protocol policies on Cisco ACI fabrics <aci_epr_policy_module>
   aci_fabric_inventory - Get fabric topology data on Cisco ACI fabrics <aci_fabric_inventory_module>
   aci_fc_policy - Manage ACI Fibre Channel interface policies on Cisco ACI fabrics <aci_fc_policy_module>
   aci_filter - Manages top level filter objects on Cisco ACI fabrics <aci_filter_module>

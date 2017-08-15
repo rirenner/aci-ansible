@@ -26,7 +26,7 @@ People interested in contributing to this project are welcome to join.
   Manage private networks (aka. contexts) on Cisco ACI fabrics
 - [aci_contract](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_contract_module.rst) -
   Manage contract resources on Cisco ACI fabrics
-- [aci_contract_subjects](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_contract_subjects_module.rst) -
+- [aci_contract_subject](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_contract_subject_module.rst) -
   Manage initial contract subjects on Cisco ACI fabrics
 - [aci_dhcp_association](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_dhcp_association_module.rst) -
   Manage DHCP Relay Labels in bridge domains on Cisco ACI fabrics
@@ -34,7 +34,7 @@ People interested in contributing to this project are welcome to join.
   Manage end point groups and related contracts on Cisco ACI fabrics
 - [aci_epg_domain_binding](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_epg_domain_binding_module.rst) -
   Manage EPG physical domain binding on Cisco ACI fabrics
-- [aci_epr](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_epr_module.rst) -
+- [aci_epr_policy](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_epr_policy_module.rst) -
   Manage end point retention policies on Cisco ACI fabrics
 - [aci_fabric_inventory](https://github.com/dagwieers/aci-ansible/blob/rstdocs/docs/aci_fabric_inventory_module.rst) -
   Get fabric topology data on Cisco ACI fabrics

@@ -1,16 +1,31 @@
 ---
+- name: Playbook for aci_rest testing
+  hosts: apic
+  gather_facts: no
 
- - name: playbook for aci testing
-   hosts: apic
-   connection: local
-   gather_facts: no
+  tasks:
+  - name: Add tenant
+    aci_rest:
+      hostname: '{{ aci_hostname }}'
+      username: '{{ aci_username }}'
+      password: '{{ aci_password }}'
+      action: post
+      config_file: files/aci_config.xml
+      uri: /api/mo/uni.xml config
+ 
+  - name: Get tenants
+    aci_rest:
+      hostname: '{{ aci_hostname }}'
+      username: '{{ aci_username }}'
+      password: '{{ aci_password }}'
+      action: get
+      uri: /api/node/class/fvTenant.json
 
-   tasks:
-      - name: add a tenant
-        aci_rest: action=post uri=/api/mo/uni.xml config_file=/home/swetha/ansible/aci-ansible/configs/aci_config.xml host={{ inventory_hostname }} username={{ user }} password={{ pass }}
- 
-      - name: get tenants
-        aci_rest: action=get uri=/api/node/class/fvTenant.json host={{ inventory_hostname }} username={{ user }} password={{ pass }}
- 
-      - name: configure contracts
-        aci_rest: action=post uri=/api/mo/uni.xml config_file=/home/swetha/ansible/aci-ansible/configs/contract_config.xml host={{ inventory_hostname }} username={{ user }} password={{ pass }}
+  - name: Configure contracts
+    aci_rest:
+      hostname: '{{ aci_hostname }}'
+      username: '{{ aci_username }}'
+      password: '{{ aci_password }}'
+      action: post
+      config_file: files/contract_config.xml
+      uri: /api/mo/uni.xml config

@@ -34,6 +34,7 @@ options:
     - Determines if the Bridge Domain should flood ARP traffic.
     - The APIC defaults new Bridge Domains to "no".
     choices: [ no, yes ]
+    default: no
   bd:
     description:
     - The name of the Bridge Domain.
@@ -43,39 +44,45 @@ options:
     - The type of traffic on the Bridge Domain.
     - The APIC defaults new Bridge Domains to Ethernet.
     choices: [ ethernet, fc ]
+    default: ethernet
   description:
     description:
     - Description for the Bridge Domain.
   enable_multicast:
     description:
     - Determines if PIM is enabled
-    - The APIC defaults new Bridge Domains to disabled.
+    - The APIC defaults new Bridge Domains to "no".
     choices: [ no, yes ]
+    default: no
   enable_routing:
     description:
     - Determines if IP forwarding should be allowed.
-    - The APIC defaults new Bridge Domains to IP forwarding enabled.
+    - The APIC defaults new Bridge Domains to "yes".
     choices: [ no, yes ]
+    default: yes
   endpoint_clear:
     description:
-    - Clears all End Points in all Leaves when enabled.
-    - The APIC defaults new Bridge Domains to disabled.
+    - Clears all End Points in all Leaves when "yes".
+    - The APIC defaults new Bridge Domains to "no".
     - The value is not reset to disabled once End Points have been cleared; that requires a second task.
     choices: [ no, yes ]
+    default: no
   endpoint_move_detect:
     description:
     - Determines if GARP should be enabled to detect when End Points move.
-    - The APIC defaults new Bridge Domains to not use GARP.
+    - The APIC defaults new Bridge Domains to "garp".
     choices: [ default, garp ]
+    defautl: garp
   endpoint_retention_action:
    description:
    - Determines if the Bridge Domain should inherit or resolve the End Point Retention Policy.
-   - The APIC defaults new Bridge Domain to End Point Retention Policies to resolve the policy.
+   - The APIC defaults new Bridge Domain to End Point Retention Policies to "resolve".
+   choices: [ inherit, resolve ]
+   default: resolve
   endpoint_retention_policy:
     description:
     - The name of the End Point Retention Policy the Bridge Domain should use when
       overriding the default End Point Retention Policy.
-    choices: [ inherit, resolve ]
   igmp_snoop_policy:
     description:
     - The name of the IGMP Snooping Policy the Bridge Domain should use when
@@ -83,32 +90,36 @@ options:
   ip_learning:
     description:
     - Determines if the Bridge Domain should learn End Point IPs.
-    - The APIC defaults new Bridge Domains to enable IP learning.
+    - The APIC defaults new Bridge Domains to "yes".
     choices: [ no, yes ]
   ipv6_nd_policy:
     description:
     - The name of the IPv6 Neighbor Discovery Policy the Bridge Domain should use when
-      overridding teh default IPV6 ND Policy.
+      overridding the default IPV6 ND Policy.
   l2_unknown_unicast:
     description:
     - Determines what forwarding method to use for unknown l2 destinations.
-    - The APIC defaults new Bridge domains to use Hardware Proxy.
+    - The APIC defaults new Bridge domains to "proxy".
     choices: [ proxy, flood ]
+    default: proxy
   l3_unknown_multicast:
     description:
     - Determines the forwarding method to use for unknown multicast destinations.
-    - The APCI defaults new Bridge Domains to use normal flooding.
+    - The APCI defaults new Bridge Domains to "flood".
     choices: [ flood, opt-flood ]
+    default: flood
   limit_ip_learn:
     description:
     - Determines if the BD should limit IP learning to only subnets owned by the Bridge Domain.
-    - The APIC defaults new Bridge Domains to learn all IP addresses.
+    - The APIC defaults new Bridge Domains to "yes".
     choices: [ no, yes ]
+    default: yes
   multi_dest:
     description:
     - Determines the forwarding method for L2 multicast, broadcast, and link layer traffic.
-    - The APIC defaults new Bridge Domains to use bd-flood.
+    - The APIC defaults new Bridge Domains to "bd-flood".
     choices: [ bd-flood, drop, encap-flood ]
+    default: bd-flood
   state:
     description:
     - Use C(present) or C(absent) for adding or removing.
@@ -128,21 +139,64 @@ options:
 EXAMPLES = r'''
 - name: Add Bridge Domain
   aci_bd:
-    action: "{{ action }}"
-    tenant: "{{ tenant }}"
-    bd: "{{ bd }}"
-    vrf: "{{ vrf }}"
-    arp_flooding: "{{ arp_flooding }}"
-    l2_unknown_unicast: "{{ l2_unknown_unicast }}"
-    l3_unknown_multicast: "{{ l3_unknown_multicast }}"
-    multi_dest: "{{ multi_dest }}"
-    gateway_ip: "{{ gateway_ip }}"
-    subnet_mask: "{{ subnet_mask }}"
-    scope: "{{ scope }}"
     host: "{{ inventory_hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
-    protocol: "{{ protocol }}"
+    validate_certs: false
+    state: present
+    tenant: prod
+    bd: web_servers
+    vrf: prod_vrf
+
+- name: Add an FC Bridge Domain
+  aci_bd:
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: false
+    state: present
+    tenant: prod
+    bd: storage
+    bd_type: fc
+    vrf: fc_vrf
+    enable_routing: no
+
+- name: Modify a Bridge Domain
+  aci_bd:
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: true
+    state: present
+    tenant: prod
+    bd: web_servers
+    arp_flooding: yes
+    l2_unknown_unicast: flood
+
+- name: Query All Bridge Domains
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: true
+    state: query
+
+- name: Query a Bridge Domain
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: true
+    state: query
+    tenant: prod
+    bd: web_servers
+
+- name: Delete a Bridge Domain
+    host: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    validate_certs: true
+    state: absent
+    tenant: prod
+    bd: web_servers
 '''
 
 RETURN = r''' # '''
@@ -187,8 +241,6 @@ def main():
                      ['state', 'present', ['bd', 'tenant']]]
     )
 
-    l2_unknown_unicast = module.params['l2_unknown_unicast']
-    l3_unknown_multicast = module.params['l3_unknown_multicast']
     arp_flooding = module.params['arp_flooding']
     bd = module.params['bd']
     bd_type = module.params['bd_type']
@@ -208,6 +260,8 @@ def main():
     igmp_snoop_policy = module.params['igmp_snoop_policy']
     ip_learning = module.params['ip_learning']
     ipv6_nd_policy = module.params['ipv6_nd_policy']
+    l2_unknown_unicast = module.params['l2_unknown_unicast']
+    l3_unknown_multicast = module.params['l3_unknown_multicast']
     limit_ip_learn = module.params['limit_ip_learn']
     multi_dest = module.params['multi_dest']
     state = module.params['state']
@@ -219,17 +273,16 @@ def main():
         module._warnings = ["The support for managing Subnets has been moved to its own module, aci_subnet. \
                             The new modules still supports 'gateway_ip' and 'subnet_mask' along with more features"]
 
-    if bd is not None:
-        if tenant is not None:
+    if tenant is not None and bd is not None:
             path = 'api/mo/uni/tn-%(tenant)s/BD-%(bd)s.json' % module.params
-            filter_string = '?rsp-subtree=full&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet&rsp-prop-include=config-only'
-        else:
-            path = 'api/class/fvBD.json'
-            filter_string = ('?query-target-filter=eq(fvBD.name, \"%(bd)s\")&rsp-subtree=children'
-                             '&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet') % module.params
+            filter_string = '?rsp-subtree=full&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet'
     elif tenant is not None:
         path = 'api/mo/uni/tn-%(tenant)s.json' % module.params
         filter_string = '?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet'
+    elif bd is not None:
+            path = 'api/class/fvBD.json'
+            filter_string = ('?query-target-filter=eq(fvBD.name, \"%(bd)s\")&rsp-subtree=children'
+                             '&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet') % module.params
     else:
         path = 'api/class/fvBD.json'
         filter_string = "?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet"

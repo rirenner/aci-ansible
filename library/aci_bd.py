@@ -265,7 +265,6 @@ def main():
     limit_ip_learn = module.params['limit_ip_learn']
     multi_dest = module.params['multi_dest']
     state = module.params['state']
-    tenant = module.params['tenant']
     vrf = module.params['vrf']
 
     # Give warning when fvSubnet parameters are passed as those have been moved to the aci_subnet module
@@ -273,48 +272,26 @@ def main():
         module._warnings = ["The support for managing Subnets has been moved to its own module, aci_subnet. \
                             The new modules still supports 'gateway_ip' and 'subnet_mask' along with more features"]
 
-    if tenant is not None and bd is not None:
-            path = 'api/mo/uni/tn-%(tenant)s/BD-%(bd)s.json' % module.params
-            filter_string = '?rsp-subtree=full&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet'
-    elif tenant is not None:
-        path = 'api/mo/uni/tn-%(tenant)s.json' % module.params
-        filter_string = '?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet'
-    elif bd is not None:
-            path = 'api/class/fvBD.json'
-            filter_string = ('?query-target-filter=eq(fvBD.name, \"%(bd)s\")&rsp-subtree=children'
-                             '&rsp-subtree-class=fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet') % module.params
-    else:
-        path = 'api/class/fvBD.json'
-        filter_string = "?rsp-subtree=full&rsp-subtree-class=fvBD,fvRsCtx,fvRsIgmpsn,fvRsBDToNdP,fvRsBdToEpRet"
-
     aci = ACIModule(module)
-
-    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
-
-    aci.get_existing(filter_string=filter_string)
+    aci.construct_url(root_class="tenant", subclass_1="bd", child_classes=['fvRsCtx', 'fvRsIgmpsn', 'fvRsBDToNdP', 'fvRsBdToEpRet'])
+    aci.get_existing()
 
     if state == 'present':
         # Filter out module params with null values
-        aci.payload(aci_class='fvBD',
-                    class_config=dict(arpFlood=arp_flooding,
-                                      descr=description,
-                                      epClear=endpoint_clear,
-                                      epMoveDetectMode=endpoint_move_detect,
-                                      ipLearning=ip_learning,
-                                      limitIpLearnToSubnets=limit_ip_learn,
-                                      mcastAllow=enable_multicast,
-                                      multiDstPktAct=multi_dest,
-                                      name=bd,
-                                      type=bd_type,
-                                      unicastRoute=enable_routing,
-                                      unkMacUcastAct=l2_unknown_unicast,
-                                      unkMcastAct=l3_unknown_multicast),
-                    child_configs=[{'fvRsCtx': {'attributes': {'tnFvCtxName': vrf}}},
-                                   {'fvRsIgmpsn': {'attributes': {'tnIgmpSnoopPolName': igmp_snoop_policy}}},
-                                   {'fvRsBDToNdP': {'attributes': {'tnNdIfPolName': ipv6_nd_policy}}},
-                                   {'fvRsBdToEpRet': {'attributes': {'resolveAct': endpoint_retention_action,
-                                    'tnFvEpRetPolName': endpoint_retention_policy}}}]
-                    )
+        aci.payload(
+            aci_class='fvBD',
+            class_config=dict(
+                arpFlood=arp_flooding, descr=description, epClear=endpoint_clear, epMoveDetectMode=endpoint_move_detect, ipLearning=ip_learning,
+                limitIpLearnToSubnets=limit_ip_learn, mcastAllow=enable_multicast, multiDstPktAct=multi_dest, name=bd, type=bd_type,
+                unicastRoute=enable_routing, unkMacUcastAct=l2_unknown_unicast, unkMcastAct=l3_unknown_multicast
+            ),
+            child_configs=[
+                {'fvRsCtx': {'attributes': {'tnFvCtxName': vrf}}},
+                {'fvRsIgmpsn': {'attributes': {'tnIgmpSnoopPolName': igmp_snoop_policy}}},
+                {'fvRsBDToNdP': {'attributes': {'tnNdIfPolName': ipv6_nd_policy}}},
+                {'fvRsBdToEpRet': {'attributes': {'resolveAct': endpoint_retention_action, 'tnFvEpRetPolName': endpoint_retention_policy}}}
+            ]
+        )
 
         # generate config diff which will be used as POST request body
         aci.get_diff(aci_class='fvBD')

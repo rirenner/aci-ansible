@@ -33,15 +33,16 @@ options:
     description:
     - The name of the contract.
     aliases: [ contract_name ]
-  filter_name:
+  filter:
     description:
     - The name of the Filter to bind to the Subject.
   log:
     description:
     - Determines if the binding should be set to log.
-    - The APIC defaults new Subject to Filter bindings to a value of none.
+    - The APIC defaults new Subject to Filter bindings to "none".
     choices: [ log, none ]
     aliases: [ directive ]
+    default: none
   subject:
     description:
     - The name of the Contract Subject.
@@ -69,7 +70,7 @@ EXAMPLES = r'''
     tenant: '{{ tenant }}'
     contract: '{{ contract }}'
     subject: '{{ subject }}'
-    filter_name: '{{ filter_name }}'
+    filter: '{{ filter }}'
     log: '{{ log }}'
 '''
 
@@ -107,21 +108,15 @@ def main():
     # tenant = module.params['tenant']
     state = module.params['state']
 
+    # Add subject_filter key to modul.params for building the URL
+    module.params['subject_filter'] = filter_name
+
     # Convert log to empty string if none, as that is what API expects. An empty string is not a good option to present the user.
     if log == 'none':
         log = ''
 
-    # TODO: cleanup this logic and provide better filter_strings for all options
-    if filter_name is not None:
-        # Work with specific binding
-        path = 'api/mo/uni/tn-%(tenant)s/brc-%(contract)s/subj-%(subject)s/rssubjFiltAtt-%(filter)s.json' % module.params
-    else:
-        path = 'api/class/vzRsSubjFiltAtt.json'
-
     aci = ACIModule(module)
-
-    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
-
+    aci.construct_url(root_class='tenant', subclass_1='contract', subclass_2='subject', subclass_3='subject_filter')
     aci.get_existing()
 
     if state == 'present':
@@ -136,6 +131,9 @@ def main():
 
     elif state == 'absent':
         aci.delete_config()
+
+    # Remove subject_filter used to build URL from module.params
+    module.params.pop('subject_filter')
 
     module.exit_json(**aci.result)
 

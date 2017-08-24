@@ -48,7 +48,7 @@ options:
   bounce_trigger:
     description:
     - Determines if the bounce entries are installed by RARP Flood or COOP Protocol.
-    - The APIC defaults new End Point Retention Policies to use COOP Protocol.
+    - The APIC defaults new End Point Retention Policies to "coop".
     type: str
     default: coop
   hold_interval:
@@ -155,14 +155,13 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_if=[['state', 'absent', ['epr_policy', 'tenant']],
-                     ['state', 'present', ['epr_policy', 'tenant']]]
+                     ['state', 'present', ['epr_policy', 'tenant']]],
     )
 
-    tenant = module.params['tenant']
     epr_policy = module.params['epr_policy']
     bounce_age = module.params['bounce_age']
-    if bounce_age is not None and bounce_age not in range(65536):
-        module.fail_json(msg="The bounce_age must be a value of 0 or between 5 and 65535")
+    if bounce_age is not None and bounce_age != 0 and bounce_age not in range(150, 65536):
+        module.fail_json(msg="The bounce_age must be a value of 0 or between 150 and 65535")
     if bounce_age == 0:
         bounce_age = 'infinite'
     bounce_trigger = module.params['bounce_trigger']
@@ -171,10 +170,10 @@ def main():
     description = module.params['description']
     hold_interval = module.params['hold_interval']
     if hold_interval is not None and hold_interval not in range(5, 65536):
-        module.fail_json(msg="The hold_interval must be a value between 0 and 65535")
+        module.fail_json(msg="The hold_interval must be a value between 5 and 65535")
     local_ep_interval = module.params['local_ep_interval']
-    if local_ep_interval is not None and local_ep_interval not in range(65536):
-        module.fail_json(msg="The local_ep_interval must be a value between 0 and 65535")
+    if local_ep_interval is not None and local_ep_interval != 0 and local_ep_interval not in range(120, 65536):
+        module.fail_json(msg="The local_ep_interval must be a value of 0 or between 120 and 65535")
     if local_ep_interval == 0:
         local_ep_interval = "infinite"
     move_frequency = module.params['move_frequency']
@@ -183,36 +182,31 @@ def main():
     if move_frequency == 0:
         move_frequency = "none"
     remote_ep_interval = module.params['remote_ep_interval']
-    if remote_ep_interval is not None and remote_ep_interval not in range(65536):
-        module.fail_json(msg="The remote_ep_interval must be a value between 0 and 65535")
+    if remote_ep_interval is not None and remote_ep_interval not in range(120, 65536):
+        module.fail_json(msg="The remote_ep_interval must be a value of 0 or between 120 and 65535")
     if remote_ep_interval == 0:
         remote_ep_interval = "infinite"
     state = module.params['state']
 
     aci = ACIModule(module)
-
-    if epr_policy is not None and tenant is not None:
-            # Work with a specific EPR
-            path = 'api/node/mo/uni/tn-%(tenant)s/epRPol-%(epr_policy)s.json' % module.params
-            filter_string = ''
-    elif epr_policy is None and tenant is None:
-        path = '/api/class/fvEpRetPol.json'
-        filter_string = ''
-    elif tenant is not None:
-        path = 'api/mo/uni/tn-%(tenant)s.json' % module.params
-        filter_string = '?rsp-subtree=children&rsp-subtree-class=fvEpRetPol'
-    else:
-        path = 'api/class/fvEpRetPol.json'
-        filter_string = '?query-target-filter=eq(fvEpRetPol.name, \"%(epr_policy)s\")' % module.params
-
-    aci.result['url'] = '%(protocol)s://%(hostname)s/' % aci.params + path
-
-    aci.get_existing(filter_string=filter_string)
+    aci.construct_url(root_class='tenant', subclass_1='epr_policy')
+    aci.get_existing()
 
     if state == 'present':
         # filter out module parameters with null values
-        aci.payload(aci_class='fvEpRetPol', class_config=dict(name=epr_policy, descr=description, bounceAgeIntvl=bounce_age, bounceTrig=bounce_trigger,
-                    holdIntvl=hold_interval, localEpAgeIntvl=local_ep_interval, remoteEpAgeIntvl=remote_ep_interval, moveFreq=move_frequency))
+        aci.payload(
+            aci_class='fvEpRetPol',
+            class_config=dict(
+                name=epr_policy,
+                descr=description,
+                bounceAgeIntvl=bounce_age,
+                bounceTrig=bounce_trigger,
+                holdIntvl=hold_interval,
+                localEpAgeIntvl=local_ep_interval,
+                remoteEpAgeIntvl=remote_ep_interval,
+                moveFreq=move_frequency,
+            ),
+        )
 
         # Generate config diff which will be used as POST request body
         aci.get_diff(aci_class='fvEpRetPol')
@@ -224,6 +218,7 @@ def main():
         aci.delete_config()
 
     module.exit_json(**aci.result)
+
 
 if __name__ == "__main__":
     main()

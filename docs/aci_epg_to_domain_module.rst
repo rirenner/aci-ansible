@@ -47,18 +47,18 @@ Options
     <td><ul><li>encap</li><li>useg</li></ul></td>
     <td>
         <div>Allows micro-segmentation.</div>
-        <div>The APIC defaults new EPG to Domain bindings to use encap</div>
+        <div>The APIC defaults new EPG to Domain bindings to use <code>encap</code>.</div>
     </td>
     </tr>
 
     <tr>
-    <td>app_profile<br/><div style="font-size: small;"></div></td>
+    <td>ap<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
     <td></td>
     <td>
         <div>Name of an existing application network profile, that will contain the EPGs.</div>
-        </br><div style="font-size: small;">aliases: app_profile_name</div>
+        </br><div style="font-size: small;">aliases: app_profile, app_profile_name</div>
     </td>
     </tr>
 
@@ -69,18 +69,18 @@ Options
     <td><ul><li>immediate</li><li>lazy</li></ul></td>
     <td>
         <div>Determines when the policy is pushed to hardware Policy CAM.</div>
-        <div>The APIC defaults new EPG to Domain bindings to lazy.</div>
+        <div>The APIC defaults new EPG to Domain bindings to <code>lazy</code>.</div>
     </td>
     </tr>
 
     <tr>
-    <td>domain_profile<br/><div style="font-size: small;"></div></td>
+    <td>domain<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
     <td></td>
     <td>
         <div>Name of the physical or virtual domain being associated with the EPG.</div>
-        </br><div style="font-size: small;">aliases: domain_name</div>
+        </br><div style="font-size: small;">aliases: domain_name, domain_profile</div>
     </td>
     </tr>
 
@@ -91,7 +91,7 @@ Options
     <td><ul><li>phys</li><li>vmm</li></ul></td>
     <td>
         <div>Determines if the Domain is physical (phys) or virtual (vmm).</div>
-        </br><div style="font-size: small;">aliases: domain</div>
+        </br><div style="font-size: small;">aliases: type</div>
     </td>
     </tr>
 
@@ -113,7 +113,7 @@ Options
     <td><ul><li>auto</li><li>vlan</li><li>vxlan</li></ul></td>
     <td>
         <div>The ecapsulataion method to be used.</div>
-        <div>The APIC defaults new EPG to Domain bindings to be auto.</div>
+        <div>The APIC defaults new EPG to Domain bindings to <code>auto</code>.</div>
     </td>
     </tr>
 
@@ -146,7 +146,7 @@ Options
     <td><ul><li>disabled</li><li>enabled</li></ul></td>
     <td>
         <div>Determines if netflow should be enabled.</div>
-        <div>The APIC defaults new EPG to Domain binings to be disabled.</div>
+        <div>The APIC defaults new EPG to Domain binings to <code>disabled</code>.</div>
     </td>
     </tr>
 
@@ -177,7 +177,7 @@ Options
     <td><ul><li>immediate</li><li>lazy</li><li>pre-provision</li></ul></td>
     <td>
         <div>Determines when the policies should be resolved and available.</div>
-        <div>The APIC defaults new EPG to Domain bindings to lazy.</div>
+        <div>The APIC defaults new EPG to Domain bindings to <code>lazy</code>.</div>
     </td>
     </tr>
 
@@ -272,7 +272,7 @@ Notes
 -----
 
 .. note::
-    - The ``tenant``, ``app_profile``, ``epg``, and ``domain`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` :ref:`aci_ap <aci_ap>`, :ref:`aci_epg <aci_epg>` :ref:`aci_domain <aci_domain>` modules can be used for this.
+    - The ``tenant``, ``ap``, ``epg``, and ``domain`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` :ref:`aci_ap <aci_ap>`, :ref:`aci_epg <aci_epg>` :ref:`aci_domain <aci_domain>` modules can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 
@@ -282,14 +282,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

@@ -91,7 +91,7 @@ Options
     <td><ul><li>none</li><li>proxy-arp</li></ul></td>
     <td>
         <div>The forwarding control used by the EPG.</div>
-        <div>The APIC defaults new EPGs to none.</div>
+        <div>The APIC defaults new EPGs to <code>none</code>.</div>
     </td>
     </tr>
 
@@ -311,14 +311,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

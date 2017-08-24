@@ -1,7 +1,7 @@
 .. _aci_epg_to_contract:
 
 
-aci_epg_to_contract - Bind EPGs to contracts on Cisco ACI fabrics (fv:RsCons and fv:RsProv)
+aci_epg_to_contract - Bind EPGs to Contracts on Cisco ACI fabrics (fv:RsCons and fv:RsProv)
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
@@ -15,7 +15,7 @@ aci_epg_to_contract - Bind EPGs to contracts on Cisco ACI fabrics (fv:RsCons and
 Synopsis
 --------
 
-* Bind EPGs to contracts on Cisco ACI fabrics.
+* Bind EPGs to Contracts on Cisco ACI fabrics.
 * More information from the internal APIC classes *fv:RsCons* at https://developer.cisco.com/media/mim-ref/MO-fvRsCons.html and *fv:RsProv* at https://developer.cisco.com/media/mim-ref/MO-fvRsProv.html.
 
 
@@ -41,13 +41,13 @@ Options
     </tr>
 
     <tr>
-    <td>app_profile<br/><div style="font-size: small;"></div></td>
+    <td>ap<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
     <td></td>
     <td>
-        <div>The name of an existing application network profile, that will contain the EPGs.</div>
-        </br><div style="font-size: small;">aliases: app_profile_name</div>
+        <div>Name of an existing application network profile, that will contain the EPGs.</div>
+        </br><div style="font-size: small;">aliases: app_profile, app_profile_name</div>
     </td>
     </tr>
 
@@ -111,7 +111,7 @@ Options
     <td><ul><li>level1</li><li>level2</li><li>level3</li><li>unspecified</li></ul></td>
     <td>
         <div>QoS class.</div>
-        <div>The APIC defaults new EPG to Contract bindings to unspecified.</div>
+        <div>The APIC defaults new EPG to Contract bindings to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -122,7 +122,7 @@ Options
     <td><ul><li>all</li><li>at_least_one</li><li>at_most_one</li><li>none</li></ul></td>
     <td>
         <div>The matching algorithm for Provided Contracts.</div>
-        <div>The APIC defaults new EPG to Provided Contracts to at_least_one.</div>
+        <div>The APIC defaults new EPG to Provided Contracts to <code>at_least_one</code>.</div>
     </td>
     </tr>
 
@@ -217,7 +217,7 @@ Notes
 -----
 
 .. note::
-    - The ``tenant``, ``app_profile``, ``EPG``, and ``contract`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>`, :ref:`aci_ap <aci_ap>`, :ref:`aci_epg <aci_epg>`, and :ref:`aci_contract <aci_contract>` modules can be used for this.
+    - The ``tenant``, ``app_profile``, ``EPG``, and ``Contract`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>`, :ref:`aci_ap <aci_ap>`, :ref:`aci_epg <aci_epg>`, and :ref:`aci_contract <aci_contract>` modules can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 
@@ -227,14 +227,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

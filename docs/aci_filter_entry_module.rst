@@ -47,7 +47,7 @@ Options
     <td><ul><li>arp_reply</li><li>arp_request</li><li>unspecified</li></ul></td>
     <td>
         <div>The arp flag to use when the ether_type is arp.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -69,7 +69,7 @@ Options
     <td><ul><li>Valid TCP/UDP Port Ranges</li></ul></td>
     <td>
         <div>Used to set both destination start and end ports to the same value when ip_protocol is tcp or udp.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -80,7 +80,7 @@ Options
     <td><ul><li>Valid TCP/UDP Port Ranges</li></ul></td>
     <td>
         <div>Used to set the destination end port when ip_protocol is tcp or udp.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -91,7 +91,7 @@ Options
     <td><ul><li>Valid TCP/UDP Port Ranges</li></ul></td>
     <td>
         <div>Used to set the destination start port when ip_protocol is tcp or udp.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -113,7 +113,7 @@ Options
     <td><ul><li>arp</li><li>fcoe</li><li>ip</li><li>mac_security</li><li>mpls_ucast</li><li>trill</li><li>unspecified</li></ul></td>
     <td>
         <div>The Ethernet type.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -146,7 +146,7 @@ Options
     <td><ul><li>dst_unreachable</li><li>echo_request</li><li>echo_reply</li><li>neighbor_advertisement</li><li>neighbor_solicitation</li><li>redirect</li><li>time_exceeded</li><li>unspecified</li></ul></td>
     <td>
         <div>ICMPv6 message type; used when ip_protocol is icmpv6.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -157,7 +157,7 @@ Options
     <td><ul><li>dst_unreachable</li><li>echo</li><li>echo_reply</li><li>src_quench</li><li>time_exceeded</li><li>unspecified</li></ul></td>
     <td>
         <div>ICMPv4 message type; used when ip_protocol is icmp.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -168,7 +168,7 @@ Options
     <td><ul><li>eigrp</li><li>egp</li><li>icmp</li><li>icmpv6</li><li>igmp</li><li>igp</li><li>l2tp</li><li>ospfigp</li><li>pim</li><li>tcp</li><li>udp</li><li>unspecified</li></ul></td>
     <td>
         <div>The IP Protocol type when ether_type is ip.</div>
-        <div>The APIC defaults new Filter Entries to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Filter Entries to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -304,14 +304,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

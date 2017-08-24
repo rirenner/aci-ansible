@@ -32,7 +32,7 @@ options:
   arp_flooding:
     description:
     - Determines if the Bridge Domain should flood ARP traffic.
-    - The APIC defaults new Bridge Domains to "no".
+    - The APIC defaults new Bridge Domains to C(no).
     choices: [ no, yes ]
     default: no
   bd:
@@ -42,7 +42,7 @@ options:
   bd_type:
     description:
     - The type of traffic on the Bridge Domain.
-    - The APIC defaults new Bridge Domains to Ethernet.
+    - The APIC defaults new Bridge Domains to C(ethernet).
     choices: [ ethernet, fc ]
     default: ethernet
   description:
@@ -51,32 +51,32 @@ options:
   enable_multicast:
     description:
     - Determines if PIM is enabled
-    - The APIC defaults new Bridge Domains to "no".
+    - The APIC defaults new Bridge Domains to C(no).
     choices: [ no, yes ]
     default: no
   enable_routing:
     description:
     - Determines if IP forwarding should be allowed.
-    - The APIC defaults new Bridge Domains to "yes".
+    - The APIC defaults new Bridge Domains to C(yes).
     choices: [ no, yes ]
     default: yes
   endpoint_clear:
     description:
-    - Clears all End Points in all Leaves when "yes".
-    - The APIC defaults new Bridge Domains to "no".
+    - Clears all End Points in all Leaves when C(yes).
+    - The APIC defaults new Bridge Domains to C(no).
     - The value is not reset to disabled once End Points have been cleared; that requires a second task.
     choices: [ no, yes ]
     default: no
   endpoint_move_detect:
     description:
     - Determines if GARP should be enabled to detect when End Points move.
-    - The APIC defaults new Bridge Domains to "garp".
+    - The APIC defaults new Bridge Domains to C(garp).
     choices: [ default, garp ]
     defautl: garp
   endpoint_retention_action:
    description:
    - Determines if the Bridge Domain should inherit or resolve the End Point Retention Policy.
-   - The APIC defaults new Bridge Domain to End Point Retention Policies to "resolve".
+   - The APIC defaults new Bridge Domain to End Point Retention Policies to C(resolve).
    choices: [ inherit, resolve ]
    default: resolve
   endpoint_retention_policy:
@@ -90,7 +90,7 @@ options:
   ip_learning:
     description:
     - Determines if the Bridge Domain should learn End Point IPs.
-    - The APIC defaults new Bridge Domains to "yes".
+    - The APIC defaults new Bridge Domains to C(yes).
     choices: [ no, yes ]
   ipv6_nd_policy:
     description:
@@ -99,25 +99,25 @@ options:
   l2_unknown_unicast:
     description:
     - Determines what forwarding method to use for unknown l2 destinations.
-    - The APIC defaults new Bridge domains to "proxy".
+    - The APIC defaults new Bridge domains to C(proxy).
     choices: [ proxy, flood ]
     default: proxy
   l3_unknown_multicast:
     description:
     - Determines the forwarding method to use for unknown multicast destinations.
-    - The APCI defaults new Bridge Domains to "flood".
+    - The APCI defaults new Bridge Domains to C(flood).
     choices: [ flood, opt-flood ]
     default: flood
   limit_ip_learn:
     description:
     - Determines if the BD should limit IP learning to only subnets owned by the Bridge Domain.
-    - The APIC defaults new Bridge Domains to "yes".
+    - The APIC defaults new Bridge Domains to C(yes).
     choices: [ no, yes ]
     default: yes
   multi_dest:
     description:
     - Determines the forwarding method for L2 multicast, broadcast, and link layer traffic.
-    - The APIC defaults new Bridge Domains to "bd-flood".
+    - The APIC defaults new Bridge Domains to C(bd-flood).
     choices: [ bd-flood, drop, encap-flood ]
     default: bd-flood
   state:

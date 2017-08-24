@@ -48,7 +48,7 @@ options:
   bounce_trigger:
     description:
     - Determines if the bounce entries are installed by RARP Flood or COOP Protocol.
-    - The APIC defaults new End Point Retention Policies to "coop".
+    - The APIC defaults new End Point Retention Policies to C(coop).
     type: str
     default: coop
   hold_interval:

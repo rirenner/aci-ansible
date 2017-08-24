@@ -84,6 +84,16 @@ Options
     </tr>
 
     <tr>
+    <td>qinq<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>disabled</td>
+    <td><ul><li>core</li><li>disabled</li><li>edge</li></ul></td>
+    <td>
+        <div>Determines if QinQ is disabled or if the port should be considered a core or edge port.</div>
+    </td>
+    </tr>
+
+    <tr>
     <td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
@@ -147,6 +157,16 @@ Options
     </tr>
 
     <tr>
+    <td>vepa<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>disabled</td>
+    <td><ul><li>disabled</li><li>enabled</li></ul></td>
+    <td>
+        <div>Determines if Virtual Ethernet Port Aggregator is disabled or enabled.</div>
+    </td>
+    </tr>
+
+    <tr>
     <td>vlan_scope<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>global</td>
@@ -189,14 +209,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

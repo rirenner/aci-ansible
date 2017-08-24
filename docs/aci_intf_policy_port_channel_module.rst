@@ -52,6 +52,30 @@ Options
     </tr>
 
     <tr>
+    <td>fast_select<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>True</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>
+        <div>Determines if Fast Select is enabled for Hot Standby Ports.</div>
+        <div>This makes up the LACP Policy Control Policy; if one setting is defined, then all other Control Properties left undefined or set to false will not exist after the task is ran.</div>
+        <div>The APIC defaults new LACP Policies to <code>true</code>.</div>
+    </td>
+    </tr>
+
+    <tr>
+    <td>graceful_convergence<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>True</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>
+        <div>Determines if Graceful Convergence is enabled.</div>
+        <div>This makes up the LACP Policy Control Policy; if one setting is defined, then all other Control Properties left undefined or set to false will not exist after the task is ran.</div>
+        <div>The APIC defaults new LACP Policies to <code>true</code>.</div>
+    </td>
+    </tr>
+
+    <tr>
     <td>hostname<br/><div style="font-size: small;"></div></td>
     <td>yes</td>
     <td></td>
@@ -63,24 +87,36 @@ Options
     </tr>
 
     <tr>
-    <td>max_links<br/><div style="font-size: small;"></div></td>
+    <td>load_defer<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
-    <td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>
+        <div>Determines if Load Defer is enabled.</div>
+        <div>This makes up the LACP Policy Control Policy; if one setting is defined, then all other Control Properties left undefined or set to false will not exist after the task is ran.</div>
+        <div>The APIC defaults new LACP Policies to <code>false</code>.</div>
+    </td>
+    </tr>
+
+    <tr>
+    <td>max_links<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>16</td>
+    <td><ul><li>Ranges from 1 to 16</li></ul></td>
     <td>
         <div>Maximum links (range 1-16).</div>
-        <div>The APIC defaults new Port Channel Policies to a max links of 16.</div>
+        <div>The APIC defaults new Port Channel Policies to <code>16</code>.</div>
     </td>
     </tr>
 
     <tr>
     <td>min_links<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td></td>
-    <td></td>
+    <td>1</td>
+    <td><ul><li>Ranges from 1 to 16</li></ul></td>
     <td>
         <div>Minimum links (range 1-16).</div>
-        <div>The APIC defaults new Port Channel Policies to a min links of 1.</div>
+        <div>The APIC defaults new Port Channel Policies to <code>1</code>.</div>
     </td>
     </tr>
 
@@ -92,7 +128,7 @@ Options
     <td>
         <div>Port channel interface policy mode.</div>
         <div>Determines the LACP method to use for forming port-channels.</div>
-        <div>The APIC defaults new Port Channel Polices to a off mode.</div>
+        <div>The APIC defaults new Port Channel Polices to <code>off</code>.</div>
     </td>
     </tr>
 
@@ -125,6 +161,30 @@ Options
     <td>
         <div>Use <code>present</code> or <code>absent</code> for adding or removing.</div>
         <div>Use <code>query</code> for listing an object or multiple objects.</div>
+    </td>
+    </tr>
+
+    <tr>
+    <td>suspend_individual<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td>True</td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>
+        <div>Determines if Suspend Individual is enabled.</div>
+        <div>This makes up the LACP Policy Control Policy; if one setting is defined, then all other Control Properties left undefined or set to false will not exist after the task is ran.</div>
+        <div>The APIC defaults new LACP Policies to <code>true</code>.</div>
+    </td>
+    </tr>
+
+    <tr>
+    <td>symmetric_hash<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+    <td><ul><li>yes</li><li>no</li></ul></td>
+    <td>
+        <div>Determines if Symmetric Hashing is enabled.</div>
+        <div>This makes up the LACP Policy Control Policy; if one setting is defined, then all other Control Properties left undefined or set to false will not exist after the task is ran.</div>
+        <div>The APIC defaults new LACP Policies to <code>false</code>.</div>
     </td>
     </tr>
 
@@ -215,14 +275,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

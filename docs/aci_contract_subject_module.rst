@@ -47,7 +47,7 @@ Options
     <td><ul><li>all</li><li>at_least_one</li><li>at_most_one</li><li>none</li></ul></td>
     <td>
         <div>The match criteria across consumers.</div>
-        <div>The APIC defaults new Contract Subjects to &quot;at_least_one&quot;.</div>
+        <div>The APIC defaults new Contract Subjects to <code>at_least_one</code>.</div>
     </td>
     </tr>
 
@@ -79,7 +79,7 @@ Options
     <td><ul><li>AF11</li><li>AF12</li><li>AF13</li><li>AF21</li><li>AF22</li><li>AF23</li><li>AF31</li><li>AF32</li><li>AF33</li><li>AF41</li><li>AF42</li><li>AF43</li><li>CS0</li><li>CS1</li><li>CS2</li><li>CS3</li><li>CS4</li><li>CS5</li><li>CS6</li><li>CS7</li><li>EF</li><li>VA</li><li>unspecified</li></ul></td>
     <td>
         <div>The target DSCP.</div>
-        <div>The APIC defaults new Contract Subjects to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Contract Subjects to <code>unspecified</code>.</div>
         </br><div style="font-size: small;">aliases: target</div>
     </td>
     </tr>
@@ -112,7 +112,7 @@ Options
     <td><ul><li>level1</li><li>level2</li><li>level3</li><li>unspecified</li></ul></td>
     <td>
         <div>The QoS class.</div>
-        <div>The APIC defaults new Contract Subjects to &quot;unspecified&quot;.</div>
+        <div>The APIC defaults new Contract Subjects to <code>unspecified</code>.</div>
     </td>
     </tr>
 
@@ -123,7 +123,7 @@ Options
     <td><ul><li>all</li><li>at_least_one</li><li>at_most_one</li><li>none</li></ul></td>
     <td>
         <div>The match criteria across providers.</div>
-        <div>The APIC defaults new Contract Subjects to &quot;at_least_one&quot;.</div>
+        <div>The APIC defaults new Contract Subjects to <code>at_least_one</code>.</div>
     </td>
     </tr>
 
@@ -134,7 +134,7 @@ Options
     <td><ul><li>True</li><li>False</li></ul></td>
     <td>
         <div>Determines if the APIC should reverse the src and dst ports to allow the return traffic back, since ACI is stateless filter.</div>
-        <div>The APIC defaults new Contract Subjects to &quot;yes&quot;.</div>
+        <div>The APIC defaults new Contract Subjects to <code>yes</code>.</div>
     </td>
     </tr>
 
@@ -291,14 +291,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

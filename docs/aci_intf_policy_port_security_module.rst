@@ -69,7 +69,7 @@ Options
     <td></td>
     <td>
         <div>Maximum number of end points (range 0-12000).</div>
-        <div>The APIC defaults new port-security policies to a max End Points of 0.</div>
+        <div>The APIC defaults new port-security policies to <code>0</code>.</div>
     </td>
     </tr>
 
@@ -190,14 +190,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

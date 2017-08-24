@@ -38,7 +38,7 @@ options:
   max_end_points:
     description:
     - Maximum number of end points (range 0-12000).
-    - The APIC defaults new port-security policies to a max End Points of 0.
+    - The APIC defaults new port-security policies to C(0).
   state:
     description:
     - Use C(present) or C(absent) for adding or removing.

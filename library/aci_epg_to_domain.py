@@ -32,7 +32,7 @@ options:
   allow_useg:
     description:
     - Allows micro-segmentation.
-    - The APIC defaults new EPG to Domain bindings to use "encap".
+    - The APIC defaults new EPG to Domain bindings to use C(encap).
     choices: [ encap, useg ]
     default: encap
   ap:
@@ -42,7 +42,7 @@ options:
   deploy_immediacy:
     description:
     - Determines when the policy is pushed to hardware Policy CAM.
-    - The APIC defaults new EPG to Domain bindings to "lazy".
+    - The APIC defaults new EPG to Domain bindings to C(lazy).
     choices: [ immediate, lazy ]
     default: lazy
   domain:
@@ -62,7 +62,7 @@ options:
   encap_mode:
     description:
     - The ecapsulataion method to be used.
-    - The APIC defaults new EPG to Domain bindings to be auto.
+    - The APIC defaults new EPG to Domain bindings to C(auto).
     choices: [ auto, vlan, vxlan ]
     default: auto
   epg:
@@ -72,7 +72,7 @@ options:
   netflow:
     description:
     - Determines if netflow should be enabled.
-    - The APIC defaults new EPG to Domain binings to be disabled.
+    - The APIC defaults new EPG to Domain binings to C(disabled).
     choices: [ disabled, enabled ]
     default: disabled
   primary_encap:
@@ -82,7 +82,7 @@ options:
   resolution_immediacy:
     description:
     - Determines when the policies should be resolved and available.
-    - The APIC defaults new EPG to Domain bindings to lazy.
+    - The APIC defaults new EPG to Domain bindings to C(lazy).
     choices: [ immediate, lazy, pre-provision ]
     default: lazy
   state:

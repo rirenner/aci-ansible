@@ -75,11 +75,11 @@ Options
     <tr>
     <td>scope<br/><div style="font-size: small;"></div></td>
     <td>no</td>
-    <td></td>
+    <td>context</td>
     <td><ul><li>application-profile</li><li>context</li><li>global</li><li>tenant</li></ul></td>
     <td>
         <div>The scope of a service contract.</div>
-        <div>The APIC defaults new Taboo Contracts to a scope of context (VRF).</div>
+        <div>The APIC defaults new Taboo Contracts to <code>context</code>.</div>
     </td>
     </tr>
 
@@ -202,14 +202,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

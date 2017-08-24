@@ -31,12 +31,12 @@ notes:
 options:
   admin_state:
     description:
-    - Enable or Disable the span sources.
+    - Enable or disable the span sources.
     choices: [ enabled, disabled ]
     default: enabled
   description:
     description:
-    - The Description for Span source group.
+    - The description for Span source group.
     aliases: [ descr ]
   dst_group:
     description:

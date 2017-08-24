@@ -45,19 +45,19 @@ options:
     description:
     - Determines if the APIC should reverse the src and dst ports to allow the
       return traffic back, since ACI is stateless filter.
-    - The APIC defaults new Contract Subjects to "yes".
+    - The APIC defaults new Contract Subjects to C(yes).
     choices: [ yes, no ]
     default: yes
   priority:
     description:
     - The QoS class.
-    - The APIC defaults new Contract Subjects to "unspecified".
+    - The APIC defaults new Contract Subjects to C(unspecified).
     choices: [ level1, level2, level3, unspecified ]
     default: unspecified
   dscp:
     description:
     - The target DSCP.
-    - The APIC defaults new Contract Subjects to "unspecified".
+    - The APIC defaults new Contract Subjects to C(unspecified).
     choices: [ AF11, AF12, AF13, AF21, AF22, AF23, AF31, AF32, AF33, AF41, AF42, AF43,
                CS0, CS1, CS2, CS3, CS4, CS5, CS6, CS7, EF, VA, unspecified ]
     aliases: [ target ]
@@ -68,13 +68,13 @@ options:
   consumer_match:
     description:
     - The match criteria across consumers.
-    - The APIC defaults new Contract Subjects to "at_least_one".
+    - The APIC defaults new Contract Subjects to C(at_least_one).
     choices: [ all, at_least_one, at_most_one, none ]
     default: at_least_one
   provider_match:
     description:
     - The match criteria across providers.
-    - The APIC defaults new Contract Subjects to "at_least_one".
+    - The APIC defaults new Contract Subjects to C(at_least_one).
     choices: [ all, at_least_one, at_most_one, none ]
     default: at_least_one
   state:

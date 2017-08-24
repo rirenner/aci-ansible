@@ -67,7 +67,7 @@ Options
     <td><ul><li>False</li><li>True</li></ul></td>
     <td>
         <div>Determines if the Subnet should be treated as a VIP; used when the BD is extended to multiple sites.</div>
-        <div>The APIC defaults new Subnets to &quot;no&quot;.</div>
+        <div>The APIC defaults new Subnets to <code>no</code>.</div>
     </td>
     </tr>
 
@@ -111,7 +111,7 @@ Options
     <td><ul><li>False</li><li>True</li></ul></td>
     <td>
         <div>Determines if the Subnet is preferred over all available Subnets. Only one Subnet per Address Family (IPv4/IPv6). can be preferred in the Bridge Domain.</div>
-        <div>The APIC defaults new Subnets to &quot;no&quot;.</div>
+        <div>The APIC defaults new Subnets to <code>no</code>.</div>
     </td>
     </tr>
 
@@ -145,7 +145,7 @@ Options
         <div>The private option only allows communication with hosts in the same VRF.</div>
         <div>The public option allows the Subnet to be advertised outside of the ACI Fabric, and allows communication with hosts in other VRFs.</div>
         <div>The shared option limits communication to hosts in either the same VRF or the shared VRF.</div>
-        <div>The APIC defaults new Subnets to &quot;private&quot;.</div>
+        <div>The APIC defaults new Subnets to <code>private</code>.</div>
     </td>
     </tr>
 
@@ -159,7 +159,7 @@ Options
         <div>The querier_ip option is used to treat the gateway_ip as an IGMP querier source IP.</div>
         <div>The nd_ra option is used to treate the gateway_ip address as a Neighbor Discovery Router Advertisement Prefix.</div>
         <div>The no_gw option is used to remove default gateway functionality from the gateway address.</div>
-        <div>The APIC defaults new Subnets to &quot;nd_ra&quot;.</div>
+        <div>The APIC defaults new Subnets to <code>nd_ra</code>.</div>
     </td>
     </tr>
 
@@ -211,14 +211,5 @@ Status
 ~~~~~~
 
 This module is flagged as **preview** which means that it is not guaranteed to have a backwards compatible interface.
-
-
-Support Level
-~~~~~~~~~~~~~
-
-This module is maintained by The Ansible Community
-
-For more information on what this means please read :doc:`modules_support`.
-
 
 For help in developing on modules, should you be so inclined, please read :doc:`community`, :doc:`dev_guide/testing` and :doc:`dev_guide/developing_modules`.

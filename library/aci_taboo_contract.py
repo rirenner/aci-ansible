@@ -46,7 +46,7 @@ options:
   scope:
     description:
     - The scope of a service contract.
-    - The APIC defaults new Taboo Contracts to "context".
+    - The APIC defaults new Taboo Contracts to C(context).
     choices: [ application-profile, context, global, tenant ]
     default: context
   state:

@@ -1,8 +1,8 @@
-.. _aci_ap:
+.. _aci_tenant_span_src_group_to_dst_group:
 
 
-aci_ap - Manage top level Application Profile (AP) objects on Cisco ACI fabrics (fv:Ap)
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+aci_tenant_span_src_group_to_dst_group - Manage SPAN source group to destination group bindings on Cisco ACI fabrics (span:SpanLbl)
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. versionadded:: 2.4
 
@@ -15,8 +15,8 @@ aci_ap - Manage top level Application Profile (AP) objects on Cisco ACI fabrics 
 Synopsis
 --------
 
-* Manage top level Application Profile (AP) objects on Cisco ACI fabrics
-* More information from the internal APIC class *fv:Ap* at https://developer.cisco.com/media/mim-ref/MO-fvAp.html.
+* Manage SPAN source groups' associated destinaton group on Cisco ACI fabrics.
+* More information from the internal APIC class *span:SrcGrp* at https://developer.cisco.com/media/mim-ref/MO-spanSpanLbl.html.
 
 
 Requirements (on host that executes module)
@@ -41,23 +41,23 @@ Options
     </tr>
 
     <tr>
-    <td>ap<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
-    <td></td>
-    <td></td>
-    <td>
-        <div>The name of the application network profile.</div>
-        </br><div style="font-size: small;">aliases: app_profile, app_profile_name, name</div>
-    </td>
-    </tr>
-
-    <tr>
-    <td>descr<br/><div style="font-size: small;"></div></td>
+    <td>description<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td></td>
     <td></td>
     <td>
-        <div>Description for the AP.</div>
+        <div>The description for Span source group to destination group binding.</div>
+        </br><div style="font-size: small;">aliases: descr</div>
+    </td>
+    </tr>
+
+    <tr>
+    <td>dst_group<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+    <td></td>
+    <td>
+        <div>The Span destination group to associate with the source group.</div>
     </td>
     </tr>
 
@@ -83,6 +83,16 @@ Options
     </tr>
 
     <tr>
+    <td>src_group<br/><div style="font-size: small;"></div></td>
+    <td>no</td>
+    <td></td>
+    <td></td>
+    <td>
+        <div>The name of the Span source group.</div>
+    </td>
+    </tr>
+
+    <tr>
     <td>state<br/><div style="font-size: small;"></div></td>
     <td>no</td>
     <td>present</td>
@@ -95,11 +105,11 @@ Options
 
     <tr>
     <td>tenant<br/><div style="font-size: small;"></div></td>
-    <td>yes</td>
+    <td>no</td>
     <td></td>
     <td></td>
     <td>
-        <div>The name of an existing tenant.</div>
+        <div>The name of the Tenant.</div>
         </br><div style="font-size: small;">aliases: tenant_name</div>
     </td>
     </tr>
@@ -167,48 +177,21 @@ Examples
  ::
 
     
-    - name: Add a new AP
-      aci_ap:
-        hostname: apic
-        username: admin
-        password: SomeSecretPassword
-        tenant: production
-        ap: default
-        description: default ap
-        state: present
-    
-    - name: Remove an AP
-      aci_ap:
-        hostname: apic
-        username: admin
-        password: SomeSecretPassword
-        tenant: production
-        ap: default
-        state: absent
-    
-    - name: Query an AP
-      aci_ap:
-        hostname: apic
-        username: admin
-        password: SomeSecretPassword
-        tenant: production
-        ap: default
-        state: query
-    
-    - name: Query all APs
-      aci_ap:
-        hostname: apic
-        username: admin
-        password: SomeSecretPassword
-        state: query
+    - aci_tenant_span_src_group_to_dst_group:
+        tenant:"{{ tenant }}"
+        src_group:"{{ src_group }}"
+        dst_group:"{{ dst_group }}"
+        description:"{{ description }}"
+        host:"{{ inventory_hostname }}"
+        username:"{{ username }}"
+        password:"{{ password }}"
 
 
 Notes
 -----
 
 .. note::
-    - This module does not manage EPGs, see :ref:`aci_epg <aci_epg>` to do this.
-    - The ``tenant`` used must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>` module can be used for this.
+    - The ``tenant``, ``src_group``, and ``dst_group`` must exist before using this module in your playbook. The :ref:`aci_tenant <aci_tenant>`, :ref:`aci_tenant_span_src_group <aci_tenant_span_src_group>`, and :ref:`aci_tenant_span_dst_group <aci_tenant_span_dst_group>` modules can be used for this.
     - By default, if an environment variable ``<protocol>_proxy`` is set on the target host, requests will be sent through that proxy. This behaviour can be overridden by setting a variable for this task (see `setting the environment <http://docs.ansible.com/playbooks_environment.html>`_), or by using the ``use_proxy`` option.
     - HTTP redirects can redirect from HTTP to HTTPS so you should be sure that your proxy environment for both protocols is correct.
 

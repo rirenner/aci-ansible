@@ -65,7 +65,7 @@ options:
   fwd_control:
     description:
     - The forwarding control used by the EPG.
-    - The APIC defaults new EPGs to none.
+    - The APIC defaults new EPGs to C(none).
     choices: [ none, proxy-arp ]
     default: none
   state:

@@ -37,7 +37,7 @@ options:
     aliases: [ descr ]
   qinq:
     description:
-    - Determins if QinQ is disabled or if the port should be considered a core or edge port.
+    - Determines if QinQ is disabled or if the port should be considered a core or edge port.
     choices: [ core, disabled, edge ]
     default: disabled
   vepa:

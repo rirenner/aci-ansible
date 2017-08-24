@@ -13,7 +13,7 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = r'''
 ---
 module: aci_epg_to_contract
-short_description: Bind EPGs to Contracts on Cisco ACI fabrics (fv:RsCons and fvRsProv)
+short_description: Bind EPGs to Contracts on Cisco ACI fabrics (fv:RsCons and fv:RsProv)
 description:
 - Bind EPGs to Contracts on Cisco ACI fabrics.
 - More information from the internal APIC classes
@@ -50,13 +50,13 @@ options:
   priority:
     description:
     - QoS class.
-    - The APIC defaults new EPG to Contract bindings to unspecified.
+    - The APIC defaults new EPG to Contract bindings to C(unspecified).
     choices: [ level1, level2, level3, unspecified ]
     default: unspecified
   provider_match:
     description:
     - The matching algorithm for Provided Contracts.
-    - The APIC defaults new EPG to Provided Contracts to at_least_one.
+    - The APIC defaults new EPG to Provided Contracts to C(at_least_one).
     choices: [ all, at_least_one, at_most_one, none ]
     default: at_least_one
   state:

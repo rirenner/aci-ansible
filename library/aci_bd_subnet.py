@@ -40,7 +40,7 @@ options:
   enable_vip:
     description:
     - Determines if the Subnet should be treated as a VIP; used when the BD is extended to multiple sites.
-    - The APIC defaults new Subnets to "no".
+    - The APIC defaults new Subnets to C(no).
     choices: [ no, yes ]
     default: no
   gateway:
@@ -60,7 +60,7 @@ options:
     description:
     - Determines if the Subnet is preferred over all available Subnets. Only one Subnet per Address Family (IPv4/IPv6).
       can be preferred in the Bridge Domain.
-    - The APIC defaults new Subnets to "no".
+    - The APIC defaults new Subnets to C(no).
     choices: [ no, yes ]
     default: no
   route_profile:
@@ -76,7 +76,7 @@ options:
     - The public option allows the Subnet to be advertised outside of the ACI Fabric, and allows communication with
       hosts in other VRFs.
     - The shared option limits communication to hosts in either the same VRF or the shared VRF.
-    - The APIC defaults new Subnets to "private".
+    - The APIC defaults new Subnets to C(private).
     choices: [ private, public, shared ]
     default: private
   subnet_control:
@@ -85,7 +85,7 @@ options:
     - The querier_ip option is used to treat the gateway_ip as an IGMP querier source IP.
     - The nd_ra option is used to treate the gateway_ip address as a Neighbor Discovery Router Advertisement Prefix.
     - The no_gw option is used to remove default gateway functionality from the gateway address.
-    - The APIC defaults new Subnets to "nd_ra".
+    - The APIC defaults new Subnets to C(nd_ra).
     choices: [ nd_ra, no_gw, querier_ip, unspecified ]
     default: nd_ra
   subnet_name:

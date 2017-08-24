@@ -39,7 +39,7 @@ options:
   log:
     description:
     - Determines if the binding should be set to log.
-    - The APIC defaults new Subject to Filter bindings to "none".
+    - The APIC defaults new Subject to Filter bindings to C(none).
     choices: [ log, none ]
     aliases: [ directive ]
     default: none

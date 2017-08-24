@@ -29,174 +29,104 @@ notes:
 - The C(tenant) used must exist before using this module in your playbook.
   The M(aci_tenant) module can be used for this.
 options:
-    action:
-        description:
-            - post, get, or delete
-        required: true
-        choices: ['post','get', 'delete']
-    tenant_name:
-        description:
-            - Tenant Name
-        required: true
-    src_group:
-        description:
-            - Span source group name
-        required: true
-    dst_group:
-        description:
-            - Span destination group name
-        required: true
-    admin_state:
-        description:
-            - Enable or Disable admin state
-        default: 'enabled'
-        choices: ['enabled','disabled']
-    descr:
-        description:
-            - Description for Span source group
-    host:
-        description:
-            - IP Address or hostname of APIC resolvable by Ansible control host
-        required: true
-    username:
-        description:
-            - Username used to login to the switch
-        required: true
-        default: 'admin'
-    password:
-        description:
-            - Password used to login to the switch
-        required: true
-    protocol:
-        description:
-            - Dictates connection protocol to use
-        default: https
-        choices: ['http', 'https']
+  admin_state:
+    description:
+    - Enable or Disable the span sources.
+    choices: [ enabled, disabled ]
+    default: enabled
+  description:
+    description:
+    - The Description for Span source group.
+    aliases: [ descr ]
+  dst_group:
+    description:
+    - The Span destination group to associate with the source group.
+  src_group:
+    description:
+    - The name of the Span source group.
+    aliases: [ name ]
+  state:
+    description:
+    - Use C(present) or C(absent) for adding or removing.
+    - Use C(query) for listing an object or multiple objects.
+    choices: [ absent, present, query ]
+    default: present
+  tenant:
+    description:
+    - The name of the Tenant.
+    aliases: [ tenant_name ]
+extends_documentation_fragment: aci
 '''
 
 EXAMPLES = '''
-- aci_span_src_group:
-    action:"{{ action }}"
-    tenant_name:"{{ tenant_name }}"
+- aci_tenant_span_src_group:
+    tenant:"{{ tenant }}"
     src_group:"{{ src_group }}"
     dst_group:"{{ dst_group }}"
     admin_state:"{{ admin_state }}"
-    descr:"{{ descr }}"
+    description:"{{ description }}"
     host:"{{ inventory_hostname }}"
     username:"{{ username }}"
     password:"{{ password }}"
-    protocol: "{{ protocol }}"
 '''
 
-import socket
-import json
-import requests
-
+from ansible.module_utils.aci import ACIModule, aci_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 
 def main():
-    ''' Ansible module to take all the parameter values from the playbook '''
-
-    module = AnsibleModule(
-        argument_spec=dict(
-            action=dict(choices=['get', 'post', 'delete'], required=False),
-            src_group=dict(type='str'),
-            dst_group=dict(type='str'),
-            admin_state=dict(choices=['enabled', 'disabled'], default='enabled'),
-            tenant_name=dict(type='str'),
-            descr=dict(type='str', required=False),
-            host=dict(required=True),
-            username=dict(type='str', default='admin'),
-            password=dict(type='str'),
-            protocol=dict(choices=['http', 'https'], default='https'),
-        ),
-        supports_check_mode=False,
+    argument_spec = aci_argument_spec
+    argument_spec.update(
+        admin_state=dict(type='str', choices=['enabled', 'disabled']),
+        description=dict(type='str', aliases=['descr']),
+        dst_group=dict(type='str'),
+        src_group=dict(type='str', required=False, aliases=['name']),  # Not required for querying all objects
+        state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
+        tenant=dict(type='str', required=False, aliases=['tenant_name']),  # Not required for querying all objects
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
-    host = socket.gethostbyname(module.params['host'])
-    username = module.params['username']
-    password = module.params['password']
-    protocol = module.params['protocol']
-    action = module.params['action']
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+        required_if=[['state', 'absent', ['src_group', 'tenant']],
+                     ['state', 'present', ['src_group', 'tenant']]],
+    )
 
     admin_state = module.params['admin_state']
-    src_group = module.params['src_group']
+    description = module.params['description']
     dst_group = module.params['dst_group']
-    tenant_name = module.params['tenant_name']
-    descr = module.params['descr']
+    src_group = module.params['src_group']
+    state = module.params['state']
 
-    post_uri = '/api/mo/uni/tn-' + tenant_name + '/srcgrp-' + src_group + '.json'
-    get_uri = '/api/node/class/spanSrcGrp.json'
+    # Add tenant_span_dst_grp to module.params for URL building
+    module.params['tenant_span_src_grp'] = src_group
 
-    config_data = {
-        "spanSrcGrp": {
-            "attributes": {
-                "adminSt": admin_state,
-                "descr": descr,
-                "name": src_group
-            },
-            "children": [{
-                "spanSpanLbl": {
-                    "attributes": {
-                        "name": dst_group,
-                    }
-                }
-            }]
-        }
-    }
-    payload_data = json.dumps(config_data)
+    aci = ACIModule(module)
+    aci.construct_url(root_class='tenant', subclass_1='tenant_span_src_grp', child_classes=['spanSpanLbl'])
+    aci.get_existing()
 
-    apic = '{0}://{1}/'.format(protocol, host)
+    if state == 'present':
+        # Filter out module parameters with null values
+        aci.payload(
+            aci_class='spanSrcGrp',
+            class_config=dict(adminSt=admin_state, descr=description, name=src_group),
+            child_configs=[{'spanSpanLbl': {'attributes': {'name': dst_group}}}],
+        )
 
-    auth = dict(aaaUser=dict(attributes=dict(name=username,
-                pwd=password)))
-    url = apic + 'api/aaaLogin.json'
+        # Generate config diff which will be used as POST request body
+        aci.get_diff(aci_class='spanSrcGrp')
 
-    authenticate = requests.post(url, data=json.dumps(auth), timeout=2,
-                                 verify=False)
+        # Submit changes if module not in check_mode and the proposed is different than existing
+        aci.post_config()
 
-    if authenticate.status_code != 200:
-        module.fail_json(msg='could not authenticate to apic',
-                         status=authenticate.status_code,
-                         response=authenticate.text)
+    elif state == 'absent':
+        aci.delete_config()
 
-    if post_uri.startswith('/'):
-        post_uri = post_uri[1:]
-    post_url = apic + post_uri
+    # Remove tenant_span_src_grp that was used to build URL from module.params
+    module.params.pop('tenant_span_src_grp')
 
-    if get_uri.startswith('/'):
-        get_uri = get_uri[1:]
-    get_url = apic + get_uri
-
-    if action == 'post':
-        req = requests.post(post_url, cookies=authenticate.cookies,
-                            data=payload_data, verify=False)
-    elif action == 'get':
-        req = requests.get(get_url, cookies=authenticate.cookies,
-                           data=payload_data, verify=False)
-    elif action == 'delete':
-        req = requests.delete(post_url, cookies=authenticate.cookies, data=payload_data, verify=False)
-
-    response = req.text
-    status = req.status_code
-
-    changed = False
-    if req.status_code == 200:
-        if action == 'post':
-            changed = True
-        else:
-            changed = False
-    else:
-        module.fail_json(msg='error issuing api request',
-                         response=response, status=status)
-
-    results = {}
-    results['status'] = status
-    results['response'] = response
-    results['changed'] = changed
-
-    module.exit_json(**results)
+    module.exit_json(**aci.result)
 
 
 if __name__ == "__main__":

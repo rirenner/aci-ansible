@@ -17,7 +17,7 @@ short_description: Manage port security on Cisco ACI fabrics (l2:PortSecurityPol
 description:
 - Manage port security on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(l2:PortSecurityPol) at U(https://developer.cisco.com/media/mim-ref/MO-l2PortSecurityPol.html).
+  I(l2:PortSecurityPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-l2PortSecurityPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -80,8 +80,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['port_security']],
-                     ['state', 'present', ['port_security']]],
+        required_if=[
+            ['state', 'absent', ['port_security']],
+            ['state', 'present', ['port_security']],
+        ],
     )
 
     port_security = module.params['port_security']
@@ -99,7 +101,11 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='l2PortSecurityPol',
-            class_config=dict(name=port_security, descr=description, maximum=max_end_points),
+            class_config=dict(
+                name=port_security,
+                descr=description,
+                maximum=max_end_points,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

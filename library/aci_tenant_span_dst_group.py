@@ -17,7 +17,7 @@ short_description: Manage SPAN destination groups on Cisco ACI fabrics (span:Des
 description:
 - Manage SPAN destination groups on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(span:DestGrp) at U(https://developer.cisco.com/media/mim-ref/MO-spanDestGrp.html).
+  I(span:DestGrp) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-spanDestGrp.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -84,8 +84,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['dst_group', 'tenant']],
-                     ['state', 'present', ['dst_group', 'tenant']]],
+        required_if=[
+            ['state', 'absent', ['dst_group', 'tenant']],
+            ['state', 'present', ['dst_group', 'tenant']],
+        ],
     )
 
     dst_group = module.params['dst_group']
@@ -103,7 +105,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='spanDestGrp',
-            class_config=dict(name=dst_group, descr=description),
+            class_config=dict(
+                name=dst_group,
+                descr=description,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

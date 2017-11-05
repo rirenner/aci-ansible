@@ -17,7 +17,7 @@ short_description: Manage filter entries on Cisco ACI fabrics (vz:Entry)
 description:
 - Manage filter entries for a filter on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(vz:Entry) at U(https://developer.cisco.com/media/mim-ref/MO-vzEntry.html).
+  I(vz:Entry) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-vzEntry.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -157,14 +157,16 @@ def main():
         ip_protocol=dict(choices=VALID_IP_PROTOCOLS, type='str'),
         state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
         stateful=dict(type='str', choices=['no', 'yes']),
-        tenant=dict(type="str", aliases=['tenant_name'])
+        tenant=dict(type="str", aliases=['tenant_name']),
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['entry', 'filter', 'tenant']],
-                     ['state', 'present', ['entry', 'filter', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['entry', 'filter', 'tenant']],
+            ['state', 'present', ['entry', 'filter', 'tenant']],
+        ],
     )
 
     arp_flag = module.params['arp_flag']
@@ -208,9 +210,17 @@ def main():
         aci.payload(
             aci_class='vzEntry',
             class_config=dict(
-                arpOpc=arp_flag, descr=description, dFromPort=dst_start, dToPort=dst_end, etherT=ether_type,
-                icmpv4T=icmp_msg_type, icmpv6T=icmp6_msg_type, name=entry, prot=ip_protocol, stateful=stateful
-            )
+                arpOpc=arp_flag,
+                descr=description,
+                dFromPort=dst_start,
+                dToPort=dst_end,
+                etherT=ether_type,
+                icmpv4T=icmp_msg_type,
+                icmpv6T=icmp6_msg_type,
+                name=entry,
+                prot=ip_protocol,
+                stateful=stateful,
+            ),
         )
 
         # generate config diff which will be used as POST request body

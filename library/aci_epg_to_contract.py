@@ -17,8 +17,8 @@ short_description: Bind EPGs to Contracts on Cisco ACI fabrics (fv:RsCons and fv
 description:
 - Bind EPGs to Contracts on Cisco ACI fabrics.
 - More information from the internal APIC classes
-  I(fv:RsCons) at U(https://developer.cisco.com/media/mim-ref/MO-fvRsCons.html) and
-  I(fv:RsProv) at U(https://developer.cisco.com/media/mim-ref/MO-fvRsProv.html).
+  I(fv:RsCons) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvRsCons.html) and
+  I(fv:RsProv) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvRsProv.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -80,7 +80,6 @@ from ansible.module_utils.aci import ACIModule, aci_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
 ACI_CLASS_MAPPING = {"consumer": "fvRsCons", "provider": "fvRsProv"}
-# ACI_MO_MAPPING = {"consumer": "rscons", "provider": "rsprov"}
 PROVIDER_MATCH_MAPPING = {"all": "All", "at_least_one": "AtleastOne", "at_most_one": "AtmostOne", "none": "None"}
 
 
@@ -101,8 +100,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['ap', 'contract', 'epg', 'tenant']],
-                     ['state', 'present', ['ap', 'contract', 'epg', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['ap', 'contract', 'epg', 'tenant']],
+            ['state', 'present', ['ap', 'contract', 'epg', 'tenant']],
+        ],
     )
 
     contract = module.params['contract']
@@ -125,7 +126,14 @@ def main():
 
     if state == 'present':
         # Filter out module parameters with null values
-        aci.payload(aci_class=aci_class, class_config=dict(matchT=provider_match, prio=priority, tnVzBrCPName=contract))
+        aci.payload(
+            aci_class=aci_class,
+            class_config=dict(
+                matchT=provider_match,
+                prio=priority,
+                tnVzBrCPName=contract,
+            ),
+        )
 
         # Generate config diff which will be used as POST request body
         aci.get_diff(aci_class=aci_class)

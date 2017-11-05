@@ -19,8 +19,8 @@ description:
 - Creating new Snapshots is done using the configExportP class.
 - Removing Snapshots is done using the configSnapshot class.
 - More information from the internal APIC classes
-  I(config:Snapshot) at U(https://developer.cisco.com/media/mim-ref/MO-configSnapshot.html) and
-  I(config:ExportP) at U(https://developer.cisco.com/media/mim-ref/MO-configExportP.html).
+  I(config:Snapshot) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-configSnapshot.html) and
+  I(config:ExportP) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-configExportP.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -51,7 +51,8 @@ options:
     description:
     - Determines if secure information should be included in the backup.
     - The APIC defaults new Export Policies to C(yes).
-    choices: [ no, yes ]
+    choices: [ 'no', 'yes' ]
+    default: 'yes'
   max_count:
     description:
     - Determines how many snapshots can exist for the Export Policy before the APIC starts to rollover.

@@ -17,7 +17,7 @@ short_description: Manage port channel interface policies on Cisco ACI fabrics (
 description:
 - Manage port channel interface policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(lacp:LagPol) at U(https://developer.cisco.com/media/mim-ref/MO-lacpLagPol.html).
+  I(lacp:LagPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-lacpLagPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -143,8 +143,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['port_channel']],
-                     ['state', 'present', ['port_channel']]]
+        required_if=[
+            ['state', 'absent', ['port_channel']],
+            ['state', 'present', ['port_channel']],
+        ],
     )
 
     port_channel = module.params['port_channel']
@@ -184,7 +186,12 @@ def main():
         aci.payload(
             aci_class='lacpLagPol',
             class_config=dict(
-                name=port_channel, ctrl=ctrl, descr=description, minLinks=min_links, maxLinks=max_links, mode=mode
+                name=port_channel,
+                ctrl=ctrl,
+                descr=description,
+                minLinks=min_links,
+                maxLinks=max_links,
+                mode=mode,
             ),
         )
 

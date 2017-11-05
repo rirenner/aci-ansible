@@ -17,7 +17,7 @@ short_description: Manage monitoring policies on Cisco ACI fabrics (mon:EPGPol)
 description:
 - Manage monitoring policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(mon:EPGPol) at U(https://developer.cisco.com/media/mim-ref/MO-monEPGPol.html).
+  I(mon:EPGPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-monEPGPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -84,8 +84,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['monitoring_policy', 'tenant']],
-                     ['state', 'present', ['monitoring_policy', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['monitoring_policy', 'tenant']],
+            ['state', 'present', ['monitoring_policy', 'tenant']],
+        ],
     )
 
     monitoring_policy = module.params['monitoring_policy']
@@ -100,7 +102,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='monEPGPol',
-            class_config=dict(name=monitoring_policy, descr=description)
+            class_config=dict(
+                name=monitoring_policy,
+                descr=description,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

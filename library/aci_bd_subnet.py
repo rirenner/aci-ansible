@@ -17,7 +17,7 @@ short_description: Manage Subnets on Cisco ACI fabrics (fv:Subnet)
 description:
 - Manage Subnets on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:Subnet) at U(https://developer.cisco.com/media/mim-ref/MO-fvSubnet.html).
+  I(fv:Subnet) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvSubnet.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -126,15 +126,17 @@ def main():
         subnet_control=dict(type='str', choices=['nd_ra', 'no_gw', 'querier_ip', 'unspecified']),
         state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
         tenant=dict(type='str', aliases=['tenant_name']),
-        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6')  # Deprecated starting from v2.6
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_together=[['gateway', 'mask']],
-        required_if=[['state', 'present', ['bd', 'gateway', 'mask', 'tenant']],
-                     ['state', 'absent', ['bd', 'gateway', 'mask', 'tenant']]]
+        required_if=[
+            ['state', 'present', ['bd', 'gateway', 'mask', 'tenant']],
+            ['state', 'absent', ['bd', 'gateway', 'mask', 'tenant']],
+        ],
     )
 
     description = module.params['description']
@@ -163,7 +165,7 @@ def main():
     aci = ACIModule(module)
     aci.construct_url(
         root_class='tenant', subclass_1='bd', subclass_2='gateway_addr',
-        child_classes=['fvRsBDSubnetToProfile', 'fvRsNdPfxPol']
+        child_classes=['fvRsBDSubnetToProfile', 'fvRsNdPfxPol'],
     )
     aci.get_existing()
 
@@ -172,13 +174,18 @@ def main():
         aci.payload(
             aci_class='fvSubnet',
             class_config=dict(
-                ctrl=subnet_control, descr=description, ip=gateway_addr, name=subnet_name,
-                preferred=preferred, scope=scope, virtual=enable_vip
+                ctrl=subnet_control,
+                descr=description,
+                ip=gateway_addr,
+                name=subnet_name,
+                preferred=preferred,
+                scope=scope,
+                virtual=enable_vip,
             ),
             child_configs=[
                 {'fvRsBDSubnetToProfile': {'attributes': {'tnL3extOutName': route_profile_l3_out, 'tnRtctrlProfileName': route_profile}}},
-                {'fvRsNdPfxPol': {'attributes': {'tnNdPfxPolName': nd_prefix_policy}}}
-            ]
+                {'fvRsNdPfxPol': {'attributes': {'tnNdPfxPolName': nd_prefix_policy}}},
+            ],
         )
 
         # Generate config diff which will be used as POST request body

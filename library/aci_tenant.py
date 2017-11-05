@@ -17,7 +17,7 @@ short_description: Manage tenants on Cisco ACI fabrics (fv:Tenant)
 description:
 - Manage tenants on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:Tenant) at U(https://developer.cisco.com/media/mim-ref/MO-fvTenant.html).
+  I(fv:Tenant) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvTenant.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -98,8 +98,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['tenant']],
-                     ['state', 'present', ['tenant']]]
+        required_if=[
+            ['state', 'absent', ['tenant']],
+            ['state', 'present', ['tenant']],
+        ],
     )
 
     tenant = module.params['tenant']
@@ -114,7 +116,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='fvTenant',
-            class_config=dict(name=tenant, descr=description)
+            class_config=dict(
+                name=tenant,
+                descr=description,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

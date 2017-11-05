@@ -17,7 +17,7 @@ short_description: Bind Bridge Domain to L3 Out on Cisco ACI fabrics (fv:RsBDToO
 description:
 - Bind Bridge Domain to L3 Out on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:RsBDToOut) at U(https://developer.cisco.com/media/mim-ref/MO-fvRsBDToOut.html).
+  I(fv:RsBDToOut) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvRsBDToOut.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -73,8 +73,10 @@ def main():
         argument_spec=argument_spec,
         supports_check_mode=True,
         required_together=[['gateway', 'mask']],
-        required_if=[['state', 'present', ['bd', 'l3out', 'tenant']],
-                     ['state', 'absent', ['bd', 'l3out', 'tenant']]]
+        required_if=[
+            ['state', 'present', ['bd', 'l3out', 'tenant']],
+            ['state', 'absent', ['bd', 'l3out', 'tenant']],
+        ],
     )
 
     l3out = module.params['l3out']
@@ -91,7 +93,7 @@ def main():
         # Filter out module params with null values
         aci.payload(
             aci_class='fvRsBDToOut',
-            class_config=dict(tnL3extOutName=l3out)
+            class_config=dict(tnL3extOutName=l3out),
         )
 
         # Generate config diff which will be used as POST request body

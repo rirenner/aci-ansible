@@ -6,7 +6,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.0',
+ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
 
@@ -17,7 +17,7 @@ short_description: Manage End Point (EP) retention protocol policies on Cisco AC
 description:
 - Manage End Point (EP) retention protocol policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:EpRetPol) at U(https://developer.cisco.com/media/mim-ref/MO-fvEpRetPol.html).
+  I(fv:EpRetPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvEpRetPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -32,24 +32,20 @@ options:
   tenant:
     description:
     - The name of an existing tenant.
-    type: str
     aliases: [ tenant_name ]
   epr_policy:
     description:
     - The name of the end point retention policy.
-    type: str
     aliases: [ epr_name, name ]
   bounce_age:
     description:
     - Bounce Entry Aging Interval (range 150secs - 65535secs)
     - 0 is used for infinite.
-    type: int
     default: 630
   bounce_trigger:
     description:
     - Determines if the bounce entries are installed by RARP Flood or COOP Protocol.
     - The APIC defaults new End Point Retention Policies to C(coop).
-    type: str
     default: coop
   hold_interval:
     description:
@@ -154,8 +150,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['epr_policy', 'tenant']],
-                     ['state', 'present', ['epr_policy', 'tenant']]],
+        required_if=[
+            ['state', 'absent', ['epr_policy', 'tenant']],
+            ['state', 'present', ['epr_policy', 'tenant']],
+        ],
     )
 
     epr_policy = module.params['epr_policy']

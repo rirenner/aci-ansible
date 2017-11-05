@@ -17,7 +17,7 @@ short_description: Manage Bridge Domains (BD) on Cisco ACI Fabrics (fv:BD)
 description:
 - Manages Bridge Domains (BD) on Cisco ACI Fabrics.
 - More information from the internal APIC class
-  I(fv:BD) at U(https://developer.cisco.com/media/mim-ref/MO-fvBD.html).
+  I(fv:BD) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvBD.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -72,7 +72,7 @@ options:
     - Determines if GARP should be enabled to detect when End Points move.
     - The APIC defaults new Bridge Domains to C(garp).
     choices: [ default, garp ]
-    defautl: garp
+    default: garp
   endpoint_retention_action:
    description:
    - Determines if the Bridge Domain should inherit or resolve the End Point Retention Policy.
@@ -174,6 +174,7 @@ EXAMPLES = r'''
     l2_unknown_unicast: flood
 
 - name: Query All Bridge Domains
+  aci_bd:
     host: "{{ inventory_hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
@@ -181,6 +182,7 @@ EXAMPLES = r'''
     state: query
 
 - name: Query a Bridge Domain
+  aci_bd:
     host: "{{ inventory_hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
@@ -190,6 +192,7 @@ EXAMPLES = r'''
     bd: web_servers
 
 - name: Delete a Bridge Domain
+  aci_bd:
     host: "{{ inventory_hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
@@ -231,14 +234,16 @@ def main():
         gateway_ip=dict(type='str', removed_in_version='2.4'),  # Deprecated starting from v2.4
         method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
         scope=dict(type='str', removed_in_version='2.4'),  # Deprecated starting from v2.4
-        subnet_mask=dict(type='str', removed_in_version='2.4')  # Deprecated starting from v2.4
+        subnet_mask=dict(type='str', removed_in_version='2.4'),  # Deprecated starting from v2.4
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['bd', 'tenant']],
-                     ['state', 'present', ['bd', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['bd', 'tenant']],
+            ['state', 'present', ['bd', 'tenant']],
+        ],
     )
 
     arp_flooding = module.params['arp_flooding']
@@ -281,16 +286,26 @@ def main():
         aci.payload(
             aci_class='fvBD',
             class_config=dict(
-                arpFlood=arp_flooding, descr=description, epClear=endpoint_clear, epMoveDetectMode=endpoint_move_detect, ipLearning=ip_learning,
-                limitIpLearnToSubnets=limit_ip_learn, mcastAllow=enable_multicast, multiDstPktAct=multi_dest, name=bd, type=bd_type,
-                unicastRoute=enable_routing, unkMacUcastAct=l2_unknown_unicast, unkMcastAct=l3_unknown_multicast
+                arpFlood=arp_flooding,
+                descr=description,
+                epClear=endpoint_clear,
+                epMoveDetectMode=endpoint_move_detect,
+                ipLearning=ip_learning,
+                limitIpLearnToSubnets=limit_ip_learn,
+                mcastAllow=enable_multicast,
+                multiDstPktAct=multi_dest,
+                name=bd,
+                type=bd_type,
+                unicastRoute=enable_routing,
+                unkMacUcastAct=l2_unknown_unicast,
+                unkMcastAct=l3_unknown_multicast,
             ),
             child_configs=[
                 {'fvRsCtx': {'attributes': {'tnFvCtxName': vrf}}},
                 {'fvRsIgmpsn': {'attributes': {'tnIgmpSnoopPolName': igmp_snoop_policy}}},
                 {'fvRsBDToNdP': {'attributes': {'tnNdIfPolName': ipv6_nd_policy}}},
-                {'fvRsBdToEpRet': {'attributes': {'resolveAct': endpoint_retention_action, 'tnFvEpRetPolName': endpoint_retention_policy}}}
-            ]
+                {'fvRsBdToEpRet': {'attributes': {'resolveAct': endpoint_retention_action, 'tnFvEpRetPolName': endpoint_retention_policy}}},
+            ],
         )
 
         # generate config diff which will be used as POST request body

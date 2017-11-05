@@ -17,7 +17,7 @@ short_description: Manage top level Application Profile (AP) objects on Cisco AC
 description:
 - Manage top level Application Profile (AP) objects on Cisco ACI fabrics
 - More information from the internal APIC class
-  I(fv:Ap) at U(https://developer.cisco.com/media/mim-ref/MO-fvAp.html).
+  I(fv:Ap) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvAp.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -110,8 +110,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['tenant', 'ap']],
-                     ['state', 'present', ['tenant', 'ap']]]
+        required_if=[
+            ['state', 'absent', ['tenant', 'ap']],
+            ['state', 'present', ['tenant', 'ap']],
+        ],
     )
 
     # tenant = module.params['tenant']
@@ -127,7 +129,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='fvAp',
-            class_config=dict(name=ap, descr=description)
+            class_config=dict(
+                name=ap,
+                descr=description,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

@@ -17,7 +17,7 @@ short_description: Manage taboo contracts on Cisco ACI fabrics (vz:BrCP)
 description:
 - Manage taboo contracts on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(vz:BrCP) at U(https://developer.cisco.com/media/mim-ref/MO-vzBrCP.html).
+  I(vz:BrCP) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-vzBrCP.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -91,8 +91,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['tenant', 'taboo_contract']],
-                     ['state', 'present', ['tenant', 'taboo_contract']]],
+        required_if=[
+            ['state', 'absent', ['tenant', 'taboo_contract']],
+            ['state', 'present', ['tenant', 'taboo_contract']],
+        ],
     )
 
     taboo_contract = module.params['taboo_contract']
@@ -108,7 +110,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='vzTaboo',
-            class_config=dict(name=taboo_contract, descr=description, scope=scope),
+            class_config=dict(
+                name=taboo_contract,
+                descr=description, scope=scope,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

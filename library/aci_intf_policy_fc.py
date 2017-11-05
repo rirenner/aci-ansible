@@ -17,7 +17,7 @@ short_description: Manage Fibre Channel interface policies on Cisco ACI fabrics 
 description:
 - Manage ACI Fiber Channel interface policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fc:IfPol) at U(https://developer.cisco.com/media/mim-ref/MO-fcIfPol.html).
+  I(fc:IfPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fcIfPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -81,8 +81,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['fc_policy']],
-                     ['state', 'present', ['fc_policy']]]
+        required_if=[
+            ['state', 'absent', ['fc_policy']],
+            ['state', 'present', ['fc_policy']],
+        ],
     )
 
     fc_policy = module.params['fc_policy']
@@ -98,7 +100,11 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='fcIfPol',
-            class_config=dict(name=fc_policy, descr=description, portMode=port_mode)
+            class_config=dict(
+                name=fc_policy,
+                descr=description,
+                portMode=port_mode,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

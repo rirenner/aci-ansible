@@ -17,7 +17,7 @@ short_description: Manages top level filter objects on Cisco ACI fabrics (vz:Fil
 description:
 - Manages top level filter objects on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(vz:Filter) at U(https://developer.cisco.com/media/mim-ref/MO-vzFilter.html).
+  I(vz:Filter) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-vzFilter.html).
 - This modules does not manage filter entries, see M(aci_filter_entry) for this functionality.
 author:
 - Swetha Chunduri (@schunduri)
@@ -112,8 +112,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['filter', 'tenant']],
-                     ['state', 'present', ['filter', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['filter', 'tenant']],
+            ['state', 'present', ['filter', 'tenant']],
+        ],
     )
 
     filter_name = module.params['filter']
@@ -128,7 +130,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='vzFilter',
-            class_config=dict(name=filter_name, descr=description)
+            class_config=dict(
+                name=filter_name,
+                descr=description,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

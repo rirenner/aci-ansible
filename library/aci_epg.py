@@ -17,7 +17,7 @@ short_description: Manage End Point Groups (EPG) on Cisco ACI fabrics (fv:AEPg)
 description:
 - Manage End Point Groups (EPG) on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:AEPg) at U(https://developer.cisco.com/media/mim-ref/MO-fvAEPg.html).
+  I(fv:AEPg) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvAEPg.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -180,8 +180,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['ap', 'epg', 'tenant']],
-                     ['state', 'present', ['ap', 'epg', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['ap', 'epg', 'tenant']],
+            ['state', 'present', ['ap', 'epg', 'tenant']],
+        ],
     )
 
     epg = module.params['epg']
@@ -200,8 +202,16 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='fvAEPg',
-            class_config=dict(name=epg, descr=description, prio=priority, pcEnfPref=intra_epg_isolation, fwdCtrl=fwd_control),
-            child_configs=[dict(fvRsBd=dict(attributes=dict(tnFvBDName=bd)))]
+            class_config=dict(
+                name=epg,
+                descr=description,
+                prio=priority,
+                pcEnfPref=intra_epg_isolation,
+                fwdCtrl=fwd_control,
+            ),
+            child_configs=[
+                dict(fvRsBd=dict(attributes=dict(tnFvBDName=bd))),
+            ],
         )
 
         # Generate config diff which will be used as POST request body

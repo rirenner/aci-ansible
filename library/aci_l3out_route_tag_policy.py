@@ -17,7 +17,7 @@ short_description: Manage route tag policies on Cisco ACI fabrics (l3ext:RouteTa
 description:
 - Manage route tag policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(l3ext:RouteTagPol) at U(https://developer.cisco.com/media/mim-ref/MO-l3extRouteTagPol.html).
+  I(l3ext:RouteTagPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-l3extRouteTagPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -90,12 +90,13 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['rtp', 'tenant']],
-                     ['state', 'present', ['rtp', 'tenant']]],
+        required_if=[
+            ['state', 'absent', ['rtp', 'tenant']],
+            ['state', 'present', ['rtp', 'tenant']],
+        ],
     )
 
     rtp = module.params['rtp']
-    # tenant = module.params['tenant']
     description = module.params['description']
     tag = module.params['tag']
     state = module.params['state']
@@ -108,7 +109,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='l3extRouteTagPol',
-            class_config=dict(name=rtp, descr=description, tag=tag),
+            class_config=dict(
+                name=rtp,
+                descr=description, tag=tag,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

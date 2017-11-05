@@ -17,7 +17,7 @@ short_description: Manage action rule profiles on Cisco ACI fabrics (rtctrl:Attr
 description:
 - Manage action rule profiles on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(rtctrl:AttrP) at U(https://developer.cisco.com/media/mim-ref/MO-rtctrlAttrP.html).
+  I(rtctrl:AttrP) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-rtctrlAttrP.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -82,8 +82,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['action_rule', 'tenant']],
-                     ['state', 'present', ['action_rule', 'tenant']]],
+        required_if=[
+            ['state', 'absent', ['action_rule', 'tenant']],
+            ['state', 'present', ['action_rule', 'tenant']],
+        ],
     )
 
     action_rule = module.params['action_rule']
@@ -98,7 +100,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='rtctrlAttrP',
-            class_config=dict(name=action_rule, descr=description),
+            class_config=dict(
+                name=action_rule,
+                descr=description,
+            ),
 
         )
 

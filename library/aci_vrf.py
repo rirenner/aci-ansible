@@ -18,7 +18,7 @@ description:
 - Manage VRF (private networks aka. contexts) on Cisco ACI fabrics.
 - Each context is a private network associated to a tenant, i.e. VRF.
 - More information from the internal APIC class
-  I(fv:Ctx) at U(https://developer.cisco.com/media/mim-ref/MO-fvCtx.html).
+  I(fv:Ctx) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvCtx.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -118,8 +118,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['tenant', 'vrf']],
-                     ['state', 'present', ['tenant', 'vrf']]]
+        required_if=[
+            ['state', 'absent', ['tenant', 'vrf']],
+            ['state', 'present', ['tenant', 'vrf']],
+        ],
     )
 
     description = module.params['description']
@@ -136,7 +138,12 @@ def main():
         # Filter out module params with null values
         aci.payload(
             aci_class='fvCtx',
-            class_config=dict(descr=description, pcEnfDir=policy_control_direction, pcEnfPref=policy_control_preference, name=vrf)
+            class_config=dict(
+                descr=description,
+                pcEnfDir=policy_control_direction,
+                pcEnfPref=policy_control_preference,
+                name=vrf,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

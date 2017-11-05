@@ -17,7 +17,7 @@ short_description: Bind EPGs to Domains on Cisco ACI fabrics (fv:RsDomAtt)
 description:
 - Bind EPGs to Physical and Virtual Domains on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(fv:RsDomAtt) at U(https://developer.cisco.com/media/mim-ref/MO-fvRsDomAtt.html).
+  I(fv:RsDomAtt) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-fvRsDomAtt.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -95,6 +95,10 @@ options:
     description:
     - Name of an existing tenant.
     aliases: [ tenant_name ]
+  vm_provider:
+    description:
+    - The VM platform for VMM Domains.
+    choices: [ microsoft, openstack, vmware ]
 extends_documentation_fragment: aci
 '''
 
@@ -105,7 +109,7 @@ RETURN = r''' # '''
 from ansible.module_utils.aci import ACIModule, aci_argument_spec
 from ansible.module_utils.basic import AnsibleModule
 
-VM_PROVIDER_MAPPING = dict(vmware="uni/vmmp-VMware/dom-")
+VM_PROVIDER_MAPPING = dict(microsoft="uni/vmmp-Microsoft/dom-", openstack="uni/vmmp-OpenStack/dom-", vmware="uni/vmmp-VMware/dom-")
 
 
 def main():
@@ -121,19 +125,21 @@ def main():
         epg=dict(type='str', aliases=['name', 'epg_name']),
         netflow=dict(type='str', choices=['disabled', 'enabled']),
         primary_encap=dict(type='int'),
-        resolution_immediacy=dict(type='str', choices=['immdediate', 'lazy', 'pre-provision']),
+        resolution_immediacy=dict(type='str', choices=['immediate', 'lazy', 'pre-provision']),
         state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
         tenant=dict(type='str', aliases=['tenant_name']),
-        vm_provider=dict(type='str', choices=['vmware']),  # TODO: Find out OVS and Hyper-V options
+        vm_provider=dict(type='str', choices=['microsoft', 'openstack', 'vmware']),
         method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['domain_type', 'vmm', ['vm_provider']],
-                     ['state', 'absent', ['ap', 'domain', 'domain_type', 'epg', 'tenant']],
-                     ['state', 'present', ['ap', 'domain', 'domain_type', 'epg', 'tenant']]]
+        required_if=[
+            ['domain_type', 'vmm', ['vm_provider']],
+            ['state', 'absent', ['ap', 'domain', 'domain_type', 'epg', 'tenant']],
+            ['state', 'present', ['ap', 'domain', 'domain_type', 'epg', 'tenant']],
+        ],
     )
 
     allow_useg = module.params['allow_useg']
@@ -176,9 +182,14 @@ def main():
         aci.payload(
             aci_class='fvRsDomAtt',
             class_config=dict(
-                classPref=allow_useg, encap=encap, encapMode=encap_mode, instrImedcy=deploy_immediacy,
-                netflowPref=netflow, primaryEncap=primary_encap, resImedcy=resolution_immediacy
-            )
+                classPref=allow_useg,
+                encap=encap,
+                encapMode=encap_mode,
+                instrImedcy=deploy_immediacy,
+                netflowPref=netflow,
+                primaryEncap=primary_encap,
+                resImedcy=resolution_immediacy,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

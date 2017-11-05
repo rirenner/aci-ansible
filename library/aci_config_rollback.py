@@ -18,7 +18,7 @@ description:
 - Provides rollback and rollback preview functionality for Cisco ACI fabric.
 - Config Rollbacks are done using snapshots C(aci_snapshot) with the configImportP class.
 - More information from the internal APIC class
-  I(config:ImportP) at U(https://developer.cisco.com/media/mim-ref/MO-configImportP.html).
+  I(config:ImportP) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-configImportP.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -44,9 +44,9 @@ options:
   fail_on_decrypt:
     description:
     - Determines if the APIC should fail the rollback if unable to decrypt secured data.
-    - The APIC defaults new Import Policies to C(true).
+    - The APIC defaults new Import Policies to C(yes).
     type: bool
-    default: true
+    default: 'yes'
   import_mode:
     description:
     - Determines how the import should be handled by the APIC.
@@ -77,6 +77,7 @@ extends_documentation_fragment: aci
 '''
 
 EXAMPLES = r'''
+---
 - name: Create a Snapshot
   aci_config_snapshot:
     hostname: apic
@@ -85,7 +86,7 @@ EXAMPLES = r'''
     state: present
     export_policy: config_backup
 
--name: Query Existing Snapshots
+- name: Query Existing Snapshots
   aci_config_snapshot:
     hostname: apic
     username: admin
@@ -105,7 +106,7 @@ EXAMPLES = r'''
     compare_snapshot: 'run-2017-08-27T23-43-56'
 
 - name: Rollback Configuration
-  aci_config_rollback
+  aci_config_rollback:
     hostname: apic
     username: admin
     password: SomeSecretPassword
@@ -115,7 +116,7 @@ EXAMPLES = r'''
     snapshot: 'run-2017-08-28T06-24-01'
 
 - name: Rollback Configuration
-  aci_config_rollback
+  aci_config_rollback:
     hostname: apic
     username: admin
     password: SomeSecretPassword
@@ -123,10 +124,10 @@ EXAMPLES = r'''
     import_policy: rollback_config
     export_policy: config_backup
     snapshot: 'run-2017-08-28T06-24-01'
-    description: 'Rollback 8-27 changes"
+    description: 'Rollback 8-27 changes'
     import_mode: atomic
     import_type: replace
-    fail_on_decrypt: 'yes'
+    fail_on_decrypt: yes
 '''
 
 RETURN = r'''
@@ -193,7 +194,7 @@ def main():
         if not snapshot.endswith('.tar.gz'):
             snapshot += '.tar.gz'
 
-        filename = 'ce2_{}-{}'.format(export_policy, snapshot)
+        filename = 'ce2_{0}-{1}'.format(export_policy, snapshot)
 
         aci.construct_url(root_class="import_policy")
         aci.get_existing()

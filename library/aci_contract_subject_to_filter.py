@@ -17,7 +17,7 @@ short_description: Bind Contract Subjects to Filters on Cisco ACI fabrics (vz:Rs
 description:
 - Bind Contract Subjects to Filters on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(vz:RsSubjFiltAtt) at U(https://developer.cisco.com/media/mim-ref/MO-vzRsSubjFiltAtt.html).
+  I(vz:RsSubjFiltAtt) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-vzRsSubjFiltAtt.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -97,8 +97,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['contract', 'filter', 'subject', 'tenant']],
-                     ['state', 'present', ['contract', 'filter', 'subject', 'tenant']]]
+        required_if=[
+            ['state', 'absent', ['contract', 'filter', 'subject', 'tenant']],
+            ['state', 'present', ['contract', 'filter', 'subject', 'tenant']],
+        ],
     )
 
     # contract = module.params['contract']
@@ -121,7 +123,13 @@ def main():
 
     if state == 'present':
         # Filter out module parameters with null values
-        aci.payload(aci_class='vzRsSubjFiltAtt', class_config=dict(tnVzFilterName=filter_name, directives=log))
+        aci.payload(
+            aci_class='vzRsSubjFiltAtt',
+            class_config=dict(
+                tnVzFilterName=filter_name,
+                directives=log,
+            ),
+        )
 
         # Generate config diff which will be used as POST request body
         aci.get_diff(aci_class='vzRsSubjFiltAtt')

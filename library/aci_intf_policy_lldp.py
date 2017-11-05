@@ -17,7 +17,7 @@ short_description: Manage LLDP interface policies on Cisco ACI fabrics (lldp:IfP
 description:
 - Manage LLDP interface policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(lldp:IfPol) at U(https://developer.cisco.com/media/mim-ref/MO-lldpIfPol.html).
+  I(lldp:IfPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-lldpIfPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -83,14 +83,16 @@ def main():
         receive_state=dict(type='str', choices=['disabled', 'enabled']),
         transmit_state=dict(type='str', choices=['disabled', 'enabled']),
         state=dict(type='str', default='present', choices=['absent', 'present', 'query']),
-        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6')  # Deprecated starting from v2.6
+        method=dict(type='str', choices=['delete', 'get', 'post'], aliases=['action'], removed_in_version='2.6'),  # Deprecated starting from v2.6
     )
 
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['lldp_policy']],
-                     ['state', 'present', ['lldp_policy']]]
+        required_if=[
+            ['state', 'absent', ['lldp_policy']],
+            ['state', 'present', ['lldp_policy']],
+        ],
     )
 
     lldp_policy = module.params['lldp_policy']
@@ -107,7 +109,12 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='lldpIfPol',
-            class_config=dict(name=lldp_policy, descr=description, adminRxSt=receive_state, adminTxSt=transmit_state)
+            class_config=dict(
+                name=lldp_policy,
+                descr=description,
+                adminRxSt=receive_state,
+                adminTxSt=transmit_state,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

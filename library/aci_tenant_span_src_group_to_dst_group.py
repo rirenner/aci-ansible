@@ -6,7 +6,7 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-ANSIBLE_METADATA = {'metadata_version': '1.0',
+ANSIBLE_METADATA = {'metadata_version': '1.1',
                     'status': ['preview'],
                     'supported_by': 'community'}
 
@@ -17,7 +17,7 @@ short_description: Manage SPAN source group to destination group bindings on Cis
 description:
 - Manage SPAN source groups' associated destinaton group on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(span:SrcGrp) at U(https://developer.cisco.com/media/mim-ref/MO-spanSpanLbl.html).
+  I(span:SrcGrp) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-spanSpanLbl.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -52,7 +52,7 @@ options:
 extends_documentation_fragment: aci
 '''
 
-EXAMPLES = '''
+EXAMPLES = r'''
 - aci_tenant_span_src_group_to_dst_group:
     tenant:"{{ tenant }}"
     src_group:"{{ src_group }}"
@@ -61,6 +61,10 @@ EXAMPLES = '''
     host:"{{ inventory_hostname }}"
     username:"{{ username }}"
     password:"{{ password }}"
+'''
+
+RETURN = r'''
+#
 '''
 
 from ansible.module_utils.aci import ACIModule, aci_argument_spec
@@ -81,8 +85,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['dst_group', 'src_group', 'tenant']],
-                     ['state', 'present', ['dst_group', 'src_group', 'tenant']]],
+        required_if=[
+            ['state', 'absent', ['dst_group', 'src_group', 'tenant']],
+            ['state', 'present', ['dst_group', 'src_group', 'tenant']],
+        ],
     )
 
     description = module.params['description']
@@ -102,7 +108,10 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='spanSpanLbl',
-            class_config=dict(descr=description, name=dst_group),
+            class_config=dict(
+                descr=description,
+                name=dst_group,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

@@ -17,7 +17,7 @@ short_description: Manage Layer 2 interface policies on Cisco ACI fabrics (l2:If
 description:
 - Manage Layer 2 interface policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(l2:IfPol) at U(https://developer.cisco.com/media/mim-ref/MO-l2IfPol.html).
+  I(l2:IfPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-l2IfPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -95,8 +95,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['l2_policy']],
-                     ['state', 'present', ['l2_policy']]]
+        required_if=[
+            ['state', 'absent', ['l2_policy']],
+            ['state', 'present', ['l2_policy']],
+        ],
     )
 
     l2_policy = module.params['l2_policy']
@@ -116,7 +118,12 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='l2IfPol',
-            class_config=dict(name=l2_policy, descr=description, vlanScope=vlan_scope, qinq=qinq, vepa=vepa)
+            class_config=dict(
+                name=l2_policy,
+                descr=description,
+                vlanScope=vlan_scope,
+                qinq=qinq, vepa=vepa,
+            ),
         )
 
         # Generate config diff which will be used as POST request body

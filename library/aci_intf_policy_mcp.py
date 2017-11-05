@@ -17,7 +17,7 @@ short_description: Manage MCP interface policies on Cisco ACI fabrics (mcp:IfPol
 description:
 - Manage MCP interface policies on Cisco ACI fabrics.
 - More information from the internal APIC class
-  I(mcp:IfPol) at U(https://developer.cisco.com/media/mim-ref/MO-mcpIfPol.html).
+  I(mcp:IfPol) at U(https://pubhub-prod.s3.amazonaws.com/media/apic-mim-ref/docs/MO-mcpIfPol.html).
 author:
 - Swetha Chunduri (@schunduri)
 - Dag Wieers (@dagwieers)
@@ -81,8 +81,10 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec,
         supports_check_mode=True,
-        required_if=[['state', 'absent', ['mcp']],
-                     ['state', 'present', ['mcp']]]
+        required_if=[
+            ['state', 'absent', ['mcp']],
+            ['state', 'present', ['mcp']],
+        ],
     )
 
     mcp = module.params['mcp']
@@ -98,7 +100,11 @@ def main():
         # Filter out module parameters with null values
         aci.payload(
             aci_class='mcpIfPol',
-            class_config=dict(name=mcp, descr=description, adminSt=admin_state)
+            class_config=dict(
+                name=mcp,
+                descr=description,
+                adminSt=admin_state,
+            ),
         )
 
         # Generate config diff which will be used as POST request body
